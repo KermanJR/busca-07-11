@@ -17,6 +17,8 @@ import IconMapTemplate from '../../../../../../public/assets/icons/icons_templat
 import IconAtendimentoTemplate from '../../../../../../public/assets/icons/icons_template/atendimento.jpg';
 import IconPhoneTemplate from '../../../../../../public/assets/icons/icons_template/phone.jpg';
 import IconZoomTemplate from '../../../../../../public/assets/icons/icons_template/zoom.jpg';
+import Iconfacebook from '../../../../../../public/assets/icons/logo-facebook.png';
+import IconInstagram from '../../../../../../public/assets/icons/logo-instagram.png';
 import IconSocialTemplate from '../../../../../../public/assets/icons/icons_template/social.jpg';
 import IconSiteTemplate from '../../../../../../public/assets/icons/icons_template/site.jpg';
 import IconCheckTemplate from '../../../../../../public/assets/icons/icons_template/check.jpg';
@@ -24,11 +26,13 @@ import Image from "@src/app/theme/components/Image/Image";
 import MapModal from "../SearchPage/Components/ModalMaps";
 import GeolocalizationMapsService from "@src/app/api/GeolocalizationMapsService";
 import { Relacionados } from "./Components/Relacionados";
+import WhatsAppButton from "../HomeScreen/Components/WhatsappButton";
 
 export default function SinglePageBuffet(){
   const {
     idBuffet,
-    dataBuffet
+    dataBuffet,
+    buffetsRelacionados
   } = useContext(UserContext)
   
     const [attractions, setAttractions] = useState([])
@@ -37,6 +41,7 @@ export default function SinglePageBuffet(){
     const [details, setDetails] = useState([]);
     const [cep, setCep] = useState();
     const [coordinates, setCoordinates] = useState([]);
+    
 
     const isMobile = useResponsive()
     const size = useSize()
@@ -44,8 +49,11 @@ export default function SinglePageBuffet(){
 
    
     const [isMapModalOpen, setIsMapModalOpen] = useState(false);
+    const [buffets, setBuffets] = useState([])
+
   
- 
+   
+
     const closeMapModal = () => {
       setIsMapModalOpen(false);
     };
@@ -90,7 +98,7 @@ export default function SinglePageBuffet(){
     useEffect(() => {
       BuffetService.showBuffetById(idBuffet ? idBuffet : JSON.parse(localStorage.getItem('ID_BUFFET')))
         .then((response) => {
-
+  
           setDetails(response)
           const attractionPromises = response?.detalhes
             .filter((item) => item.id_atracao !== null)
@@ -136,13 +144,37 @@ export default function SinglePageBuffet(){
         });
     }, []);
 
+
+
     useEffect(()=>{
-      GeolocalizationMapsService.geocodeAddressByCep(details? details?.['entidade']?.enderecos[0]?.endereco?.cep: null)
-        .then(async (response)=>{
-          setCoordinates([response]);
+      let accumulatedCoordinates = [];
+      buffetsRelacionados?.map((item,index)=>{
+        GeolocalizationMapsService.geocodeAddressByCep(item?.['entidade']?.['enderecos'][0]?.['endereco']?.['cep'])
+        .then((response)=>{
+          accumulatedCoordinates.push(response);
+          setCoordinates(accumulatedCoordinates);
         })
+      })
+      
     }, [details])
+
+ 
+
+    useEffect(()=>{
+      BuffetService.showBuffets()
+        .then(res=>{
+          setBuffets(res)
+        })
+    }, [])
   
+    
+    
+    const removeMask = (formattedValue) => {
+      // Remove todos os caracteres não numéricos
+      return formattedValue.replace(/\D/g, '');
+    };
+
+
     
 
 
@@ -195,7 +227,7 @@ export default function SinglePageBuffet(){
                         padding: '1rem 0',
                         borderBottom: `1px solid ${theme.colors.neutral.x100}`
                       }}>
-                        Principais atrações
+                        Principais Comodidades
                     </Text>
                     <Box tag="div"                  
                       styleSheet={{                 
@@ -208,7 +240,7 @@ export default function SinglePageBuffet(){
                       {attractions?.map((nome, index)=>{
                           return(
                               <Box styleSheet={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '0.5rem', padding: '1rem 0'}}>
-                                <Icon name="hospitalUser" fill={theme.colors.secondary.x500} size="xl" />
+                               <Image src={IconCheckTemplate.src} alt=""/>
                                 <Text styleSheet={{wordWrap: 'break-word'}} variant="btnRegular">{nome}</Text>
                               </Box>
                           )
@@ -331,30 +363,7 @@ export default function SinglePageBuffet(){
                         </Box>
                       </Box>
 
-                      <Box styleSheet={{display: 'flex', flexDirection: 'row', gap: '1rem', justifyContent: 'left', alignItems: 'center'}}>
-                        <Box>
-                          <Image alt="Ícone de zoom" src={IconSocialTemplate.src} styleSheet={{
-                            width: !(size < 500) ? 'auto' : '25px',
-                            heigth: !(size < 500) ? 'auto' : '25px',
-                          }} />
-                        </Box>
-                        <Box>
-                          <Text variant={!(size < 500) ? 'heading5Bold' : 'heading6Bold'}>Redes Sociais</Text>
-                          <Text variant="btnRegular" styleSheet={{color: theme.colors.neutral.x999}}>@facebook/buscabuffet</Text>
-                        </Box>
-                      </Box>
-                    </Box>
-                  </Box>
-
-                  <Box tag="div">
-                    <Box tag="div" 
-                        styleSheet={{
-                          display: 'grid',
-                          gridTemplateColumns: !(size < 500) ? 'repeat(3, 1fr)' : '1fr',
-                          gap: '2rem',
-                          marginTop: !(size < 500) ? '3rem' : '1rem'
-                      }}
-                    >
+                      
                       <Box styleSheet={{display: 'flex', flexDirection: 'row', gap: '1rem', justifyContent: 'left', alignItems: 'center'}}>
                         <Box>
                           <Image alt="Ícone de zoom" src={IconUserTemplate.src} styleSheet={{
@@ -369,6 +378,8 @@ export default function SinglePageBuffet(){
                       </Box>
                     </Box>
                   </Box>
+
+                  
 
                   <Box tag="div">
                     <Box tag="div" 
@@ -411,18 +422,57 @@ export default function SinglePageBuffet(){
                         </Box>
                       </Box>
 
-                      
-                      <Box styleSheet={{display: 'flex', flexDirection: 'row', gap: '1rem', justifyContent: 'left', alignItems: 'center'}}>
-                        <Box>
-                          <Image alt="Ícone de zoom" src={IconSiteTemplate.src} styleSheet={{
+
+                    </Box>
+                  </Box>
+                  <Box tag="div">
+                    <Box tag="div" 
+                        styleSheet={{
+                          display: 'grid',
+                          gridTemplateColumns: !(size < 500) ? 'repeat(3, 1fr)' : '1fr',
+                          gap: '2rem',
+                          marginTop: !(size < 500) ? '3rem' : '1rem'
+                      }}
+                    >
+                      <Box styleSheet={{display: 'flex', flexDirection: 'row', gap: '1rem', justifyContent: 'left', alignItems: 'center', marginLeft: '-2rem'}}>
+                        <Box styleSheet={{width: '100px', height: '100px'}}>
+                          <Image alt="Ícone de zoom" src={IconInstagram.src} styleSheet={{
                             width: !(size < 500) ? 'auto' : '25px',
                             heigth: !(size < 500) ? 'auto' : '25px',
-                          }}/>
+                          }} />
+                        </Box>
+                        <Box>
+                          <Text variant={!(size < 500) ? 'heading5Bold' : 'heading6Bold'} styleSheet={{ marginLeft: '-2rem'}}>Instagram</Text>
+                          <Text variant="btnRegular" styleSheet={{color: theme.colors.neutral.x999,  marginLeft: '-2rem'}} >
+                            <a href={`https://${details?.['entidade']?.redesSociais[0]?.descricao}`}>{details?.['entidade']?.redesSociais[0]?.descricao? details?.['entidade']?.redesSociais[0]?.descricao: ''}</a>
+                            </Text>
+                        </Box>
+                      </Box>
+                      <Box styleSheet={{display: 'flex', flexDirection: 'row', gap: '1rem', justifyContent: 'left', alignItems: 'center'}}>
+                        <Box styleSheet={{width: '100px', height: '100px'}}>
+                          <Image alt="Ícone de zoom" src={Iconfacebook.src} styleSheet={{
+                            width: !(size < 500) ? 'auto' : '25px',
+                            heigth: !(size < 500) ? 'auto' : '25px',
+                          }} />
+                        </Box>
+                        <Box>
+                          <Text variant={!(size < 500) ? 'heading5Bold' : 'heading6Bold'} styleSheet={{ marginLeft: '-2rem'}}>Facebook</Text>
+                          <Text variant="btnRegular" styleSheet={{color: theme.colors.neutral.x999, marginLeft: '-2rem'}}>
+                          <a href={`https://${details?.['entidade']?.redesSociais[0]?.descricao}`}>{details?.['entidade']?.redesSociais[1]?.descricao? details?.['entidade']?.redesSociais[1]?.descricao: ''}</a>
+                          </Text>
+                        </Box>
+                      </Box>
+                      <Box styleSheet={{display: 'flex', flexDirection: 'row', gap: '1rem', justifyContent: 'left', alignItems: 'center'}}>
+                        <Box>
+                          <Image alt="Ícone de zoom" src={IconSocialTemplate.src} styleSheet={{
+                            width: !(size < 500) ? 'auto' : '25px',
+                            heigth: !(size < 500) ? 'auto' : '25px',
+                          }} />
                         </Box>
                         <Box>
                           <Text variant={!(size < 500) ? 'heading5Bold' : 'heading6Bold'}>Site</Text>
-                          <Text styleSheet={{color: theme.colors.neutral.x999}} variant="btnRegular">
-                              www.sitebuffet.com.br
+                          <Text variant="btnRegular" styleSheet={{color: theme.colors.neutral.x999}}>
+                          <a href={`https://${details?.['entidade']?.redesSociais[2]?.descricao}`}>{details?.['entidade']?.redesSociais[1]?.descricao? details?.['entidade']?.redesSociais[2]?.descricao: ''}</a>
                           </Text>
                         </Box>
                       </Box>
@@ -437,7 +487,8 @@ export default function SinglePageBuffet(){
                           styleSheet={{
                               padding: '1rem 0',
                               borderBottom: `1px solid ${theme.colors.neutral.x100}`,
-                              marginTop: '3rem'
+                              marginTop: '3rem',
+                              fontWeight: '600'
                           }}>
                           Galeria
                       </Text>
@@ -481,6 +532,7 @@ export default function SinglePageBuffet(){
               </Box>
             </>
           </Box>
+          <WhatsAppButton number={details?.['entidade']?.enderecos[0]?.telefone? removeMask(details?.['entidade']?.enderecos[0]?.telefone): ''}/>
       </Box>
     )
 }

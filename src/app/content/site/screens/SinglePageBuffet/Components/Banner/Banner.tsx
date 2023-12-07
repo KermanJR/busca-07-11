@@ -13,7 +13,7 @@ export default function Banner({data}){
 
 
     const imagemCapa = imagens?.find(imagem => imagem?.arquivo?.tipo === 'capa');
-    console.log(imagemCapa?.arquivo?.path)
+
 
     return(
         <Box tag="div"
@@ -39,19 +39,19 @@ export default function Banner({data}){
                     flexDirectioc: 'column'
                 }}
             >
-                <Text tag="h3" variant="heading3semiBold"
-                    styleSheet={{color: `${theme.colors.complementar.x500}`}}
+                <Text variant="heading3semiBold"
+                    styleSheet={{color: `${theme.colors.neutral.x000}`, fontSize: '3rem'}}
                 >
                     {data?.entidade?.nome}
                 </Text>
 
                 <Text tag="p" variant="body2"
-                    styleSheet={{color: `${theme.colors.complementar.x500}`}}
+                    styleSheet={{color: `${theme.colors.neutral.x000}`, fontSize: '1.2rem', paddingTop: '.5rem'}}
                 >
                     Cadastre-se e solicite seu orçamento
                 </Text>
 
-                <Button href="/orcamento-por-regiao" variant="contained" colorVariant="secondary" size="lg" styleSheet={{margin: '2rem auto'}}>Faça seu orçamento</Button>
+                <Button href="/orcamento-por-regiao" variant="contained" colorVariant="secondary" size="lg" styleSheet={{margin: '2rem auto'}}>Solicitar orçamento</Button>
             </Box>
         </Box>
     )

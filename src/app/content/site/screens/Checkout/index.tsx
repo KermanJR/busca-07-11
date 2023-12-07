@@ -17,15 +17,12 @@ import useFormatarMoeda from "@src/app/theme/helpers/useFormatarMoeda";
 import PagBankService from "@src/app/api/PagBankService";
 import BuffetService from "@src/app/api/BuffetService";
 import {encryptCardPagSeguro} from "@src/app/api/encryptPagSeguro.js";
-import Close from '../../../../../../public/assets/images/close.png'
-import Correct from '../../../../../../public/assets/images/correct.png'
-import Image from "@src/app/theme/components/Image/Image";
-import SendIcon from '@mui/icons-material/Send';
-import LoadingButton from "@mui/lab/LoadingButton";
 import CircularProgress from '@mui/material/CircularProgress';
 import LinkSystem from "@src/app/components/system/LinkSystem";
-import Button from '@mui/material/Button';
-
+import { Button as BtnMaterial } from '@mui/material';
+import Button from "@src/app/theme/components/Button/Button";
+import IconVisa from '../../../../../../public/assets/icons/visa.png';
+import IconMastercard from '../../../../../../public/assets/icons/mastercard.png';
 
 export default function Checkout(){
 
@@ -38,6 +35,7 @@ export default function Checkout(){
   const [idPlano, setIdPlano] = useState(null);
 
   const [isLoading, setIsLoading] = useState(false);
+  const [bandeira, setBandeira] = useState(null);
 
 
   //Dados do assinante
@@ -106,6 +104,8 @@ export default function Checkout(){
     const [messageSucessSignature, setMessageSuccessSignature] = useState('');
     const [showNegationModal, setShowNegationModal] = useState(false);
 
+    const [valorPlanoBasico, setValorPlanoBasico] = useState(null);
+
     function ConfirmationModal() {
       return (
         <Box
@@ -133,34 +133,40 @@ export default function Checkout(){
           type="submit"
           variant="contained"
           onClick={(e)=>setShowConfirmationModal(!showConfirmationModal)}
-          style={{
-            width: '20px',
-            height: '20px',
-            border: 'none',
-            textAlign: 'left',
-            cursor: 'pointer',
-            background: theme.colors.secondary.x500,
-            marginLeft: '1rem',
+          styleSheet={{
+            backgroundColor: theme.colors.secondary.x500,
+            borderRadius: '100%',
+            height: '30px',
+            width: '25px',
+            textAlign: 'center',
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            marginBottom: '0rem',
+            position: 'relative',
+            alignSelf: 'end',
             marginTop: '1rem',
-            borderRadius: '20px',
+            marginRight: '1rem',
+            boxShadow: '0.5px 1px 3px 1px #969BA0'
           }}
         
         >
           X
         </Button>
         
-         <Text  color={theme.colors.primary.x500} styleSheet={{fontSize: '1rem', fontWeigth: '700', width: '80%', margin: '0 auto', display:' flex', flexDirection: 'row', height: '60%',justifyContent: 'center', alignItems: 'center', marginTop: '-1rem'}}>
-            {dataUser['entidade']?.nome}, sua assinatura foi concluída com sucesso!
-            Aproveite o benefícios de escolher a Busca Buffet e faça seu negócio ser visto por milhares de pessoas em nossa plataforma.
+         <Text  color={theme.colors.primary.x500} styleSheet={{fontSize: '1rem', fontWeigth: '700', width: '80%', margin: '-1rem auto', display:' flex', flexDirection: 'row', height: '60%',justifyContent: 'center', alignItems: 'center', marginTop: '-2rem'}}>
+            {name && name}, sua assinatura está em análise!
             
          </Text>
-         
-         <Text  color={theme.colors.secondary.x500} styleSheet={{fontSize: '1rem', fontWeigth: '700', width: '80%', margin: '0 auto', display:' flex', flexDirection: 'row', height: 'auto',justifyContent: 'left', alignItems: 'left', marginTop: '-1rem'}}>
-            Você assinou o  <Text styleSheet={{fontSize: '1.5rem', marginLeft: '10px', marginRight: '10px'}} color={theme.colors.secondary.x500}> Plano Premium  </Text> no valor de R$ 79,90/mês.
+
+         <Text  color={theme.colors.primary.x500} styleSheet={{fontSize: '1rem', fontWeigth: '700', width: '80%', textAlign: 'center',margin: '-1rem auto', display:' flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: '-2rem'}}>
+          
+            Aproveite os benefícios de escolher a Busca Buffet e faça seu negócio ser visto por milhares de pessoas em nossa plataforma.
             
          </Text>
-         <Text onClick={(e)=>router.push('/dashboard/buffet')} color={theme.colors.secondary.x500} styleSheet={{cursor: 'pointer', marginTop: '1rem', fontSize: '.875rem', fontWeigth: '700', width: '80%', margin: '1rem auto', display:' flex', flexDirection: 'row', height: 'auto',justifyContent: 'left', alignItems: 'left'}}>
-            Retornar para o dashboard <Text styleSheet={{cursor: 'pointer',fontSize: '1.4rem', marginLeft: '.7rem'}} color={theme.colors.secondary.x500} >{`>`}</Text>
+
+         <Text onClick={(e)=>router.push('/dashboard/buffet')} color={theme.colors.secondary.x500} styleSheet={{cursor: 'pointer', textAlign: 'center',marginTop: '1rem', fontSize: '.875rem', fontWeigth: '700', width: '80%', margin: '2rem auto', display:' flex', flexDirection: 'row', height: 'auto',justifyContent: 'center', alignItems: 'center'}}>
+            Ir para o dashboard <Text styleSheet={{cursor: 'pointer',fontSize: '1.4rem', marginLeft: '.7rem'}} color={theme.colors.secondary.x500} >{`>`}</Text>
          </Text>
          
          </Box>
@@ -169,68 +175,7 @@ export default function Checkout(){
       );
     }
 
-    function NegationModal() {
-      return (
-        <Box
-          styleSheet={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            backgroundColor: 'rgba(0, 0, 0, 0.5)', // Sobreposição escura
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            zIndex: 999, // Garanta que esteja na parte superior
-          }}
-        >
-           <Box styleSheet={{
-            backgroundColor: 'white',
-            borderRadius: '8px',
-            height: '300px',
-            width: '50%'
-          }}>
 
-              
-
-<Button
-          type="submit"
-          variant="contained"
-          onClick={(e)=>setShowNegationModal(!showNegationModal)}
-          disabled={isLoading}
-          style={{
-            width: '20px',
-            height: '20px',
-            border: 'none',
-            textAlign: 'left',
-            cursor: 'pointer',
-            background: theme.colors.secondary.x500,
-            marginLeft: '1rem',
-            marginTop: '1rem',
-            borderRadius: '20px',
-          }}
-        
-        >
-          X
-        </Button>
-           
-        <Text  color={theme.colors.primary.x500} styleSheet={{fontSize: '1rem', fontWeigth: '700', width: '80%', margin: '0 auto', display:' flex', flexDirection: 'row', height: 'auto',justifyContent: 'center', alignItems: 'center', marginTop: '2rem'}}>
-            {dataUser['entidade']?.nome}, seu pagamento foi recusado, por favor, tente novamente ou utilize outro cartão de crédito.
-           
-            
-         </Text>
-         <Text  color={theme.colors.secondary.x500} styleSheet={{ marginTop: '1rem', fontSize: '.875rem', fontWeigth: '700', width: '80%', margin: '1rem auto', display:' flex', flexDirection: 'row', height: 'auto',justifyContent: 'left', alignItems: 'left'}}>
-         Aproveite os benefícios de escolher a Busca Buffet e faça seu negócio ser visto por milhares de pessoas em nossa plataforma.
-         </Text>
-         <Text onClick={(e)=>setShowNegationModal(!showNegationModal)} color={theme.colors.secondary.x500} styleSheet={{cursor: 'pointer', marginTop: '1rem', fontSize: '.875rem', fontWeigth: '700', width: '80%', margin: '1rem auto', display:' flex', flexDirection: 'row', height: 'auto',justifyContent: 'left', alignItems: 'left'}}>
-            Tentar novamente <Text styleSheet={{cursor: 'pointer',fontSize: '1.4rem', marginLeft: '.7rem'}} color={theme.colors.secondary.x500} >{`>`}</Text>
-         </Text>
-          
-          </Box>
-        </Box>
-      );
-    }
 
 
     
@@ -283,7 +228,7 @@ export default function Checkout(){
     }
 
     //EDITAR BUFFET
-  function EditBuffet(){
+  /*function EditBuffet(){
     BuffetService.editBuffets(dataBuffet?.['id'], {
       slug: dataBuffet?.['slug'],
       capacidade_total: dataBuffet?.['capacidade_total'],
@@ -305,13 +250,13 @@ export default function Checkout(){
     }).catch((error)=>{
       console.log(error)
     })
-  }
+  }*/
 
 
 
         
 
-    async function EditSignatureBuffet(idOrder, status){
+    /*async function EditSignatureBuffet(idOrder, status){
       const data = {
         "tipo": `${idOrder}`,
         "status": status,
@@ -330,7 +275,7 @@ export default function Checkout(){
         }).catch(err=>{
           console.log(err)
         })
-    }
+    }*/
 
     function converterMoedaParaNumero(valor) {
       valor = valor?.replace('R$', ' ').replace(',', '.');
@@ -355,7 +300,9 @@ export default function Checkout(){
       e.preventDefault();
       const data = {
           "plan": {
-            "id": "PLAN_4F77888E-C80C-4289-A174-953C0E9AAA41"
+            "id": window?.localStorage?.getItem('ID_PLAN') == '1' && 'PLAN_3571D956-D88B-485C-89EC-18CA89CF0C1C' ||
+            window?.localStorage?.getItem('ID_PLAN') == '2' && 'PLAN_84372B0E-18DF-4CB2-856F-7F97175EEBFE' ||
+            window?.localStorage?.getItem('ID_PLAN') == '3' && 'PLAN_4F77888E-C80C-4289-A174-953C0E9AAA41' 
           },
           "customer": {
             "name": nomeAssinante,
@@ -374,7 +321,7 @@ export default function Checkout(){
                 {
                 "country": "55",
                 "area": dddAssinante,
-                "number": telefoneAssinante
+                "number": removeWhiteSpace(telefoneAssinante)
                 }
             ],
           "birth_date": dataNascimentoAssinante
@@ -387,11 +334,11 @@ export default function Checkout(){
             "unit": "MONTH",
             "length": 1
           },
-          /*"trial": {
+          "trial": {
             "enabled": true,
             "hold_setup_fee": false,
             "days": 90
-          },*/
+          },
           "reference_id": "00005",
           "payment_method": [
             {
@@ -411,15 +358,13 @@ export default function Checkout(){
             setErrorsPedido(res?.error_messages)
           }
           else {
-            if(res?.status === 'ACTIVE'){
-              await EditSignatureBuffet(res?.id, res?.status);
+            if(res?.status === 'ACTIVE' || res?.status ===  'OVERDUE'){
+             //await EditSignatureBuffet(res?.id, res?.status);
+              await createSignatureBuffet(res?.id);
               setShowConfirmationModal(true)
-              EditBuffet()
+              //EditBuffet()
               setSuccessPedido(true)
-            }else if(res?.status === 'OVERDUE'){
-              console.log('teste')
-              setSuccessPedido(false)
-              setShowNegationModal(true)
+            
             }
           }
         })
@@ -431,6 +376,124 @@ export default function Checkout(){
         }, 3000)
        
     }
+
+    const formatPhoneNumber = (input) => {
+      // Remove todos os caracteres não numéricos
+      const cleaned = input.replace(/\D/g, '');
+    
+      // Garante que tenha no máximo 9 dígitos
+      const truncated = cleaned.slice(0, 9);
+    
+      // Verifica se há pelo menos 1 dígito para formatar
+      if (truncated.length > 0) {
+        // Aplica a máscara para formatar o número de telefone
+        const formatted = truncated.replace(/(\d{1})(\d{8})/, '$1 $2');
+    
+        // Define o estado ou faça o que quiser com o número formatado
+        setTelefoneAssinante(formatted);
+      } else {
+        // Se não houver dígitos, define como vazio (ou outra lógica desejada)
+        setTelefoneAssinante('');
+      }
+    };
+    const removeWhiteSpace = (input) => {
+      return input.replace(/\s/g, '');
+    };
+
+    const formatCreditCardExpiration = (input) => {
+      console.log(input)
+      // Remove todos os caracteres não numéricos
+      const cleaned = input.replace(/\D/g, '');
+    
+      // Garante que tenha no máximo 6 dígitos
+      const truncated = cleaned.slice(0, 6);
+    
+      // Verifica se há pelo menos 2 dígitos para formatar
+      if (truncated.length >= 2) {
+        // Aplica a máscara para formatar a data de validade do cartão de crédito
+        const formatted = truncated.replace(/(\d{2})(\d{0,4})/, '$1/$2');
+    
+        // Define o estado ou faça o que quiser com a data formatada
+        setExpirationCard(formatted);
+      } else {
+        // Se não houver dígitos suficientes, define como vazio (ou outra lógica desejada)
+        setExpirationCard('');
+      }
+    };
+
+    const handleChangeExpiration = (e) => {
+      // Chama a função de formatação e passa o valor atual do input
+      formatCreditCardExpiration(e);
+    };
+
+    const formatCreditCardCvv = (input) => {
+      const cleaned = input.replace(/\D/g, '');
+      const truncated = cleaned.slice(0, 3);
+  
+      setCvvCard(truncated);
+    };
+
+    const detectarBandeira = (numero) => {
+      const cleaned = numero.replace(/\D/g, '');
+  
+      if (/^4/.test(cleaned)) {
+        setBandeira('visa');
+      } else if (/^5[1-5]/.test(cleaned)) {
+        setBandeira('mastercard');
+      } else if (/^3[47]/.test(cleaned)) {
+        setBandeira('amex');
+      } else if (/^6(?:011|5)/.test(cleaned)) {
+        setBandeira('discover');
+      } else {
+        setBandeira(null);
+      }
+    };
+
+    const formatCreditCardNumber = (input) => {
+      // Remove todos os caracteres não numéricos
+      const cleaned = input.replace(/\D/g, '');
+    
+      // Define os padrões de comprimento para Visa e Mastercard
+      const visaPattern = /^4\d{12}(\d{3})?$/;
+      const mastercardPattern = /^5[1-5]\d{14}$/;
+    
+      // Verifica se o número atende aos padrões
+      if (visaPattern.test(cleaned)) {
+        // Formata o número para Visa (por exemplo, adiciona espaços a cada 4 dígitos)
+        const formatted = cleaned.replace(/(\d{4})/g, '$1 ').trim();
+        return formatted;
+      } else if (mastercardPattern.test(cleaned)) {
+        // Formata o número para Mastercard (por exemplo, adiciona espaços a cada 4 dígitos)
+        const formatted = cleaned.replace(/(\d{4})/g, '$1 ').trim();
+        return formatted;
+      } else {
+        // Se não atender aos padrões, retorna o número original
+        return cleaned;
+      }
+    };
+
+
+
+    const handleChangeNumeroCartao = (e) => {
+      setNumberCard(e);
+      detectarBandeira(e);
+    };
+  
+  
+  
+
+    useEffect(()=>{
+      BuffetService.showPlans()
+      .then(res=>{
+        console.log(res)
+        let id_plan =  window?.localStorage?.getItem('VALUE_PLAN')
+        var valorNumericoString = id_plan.replace(/[^\d,]/g, '');
+        var valorNumerico = parseFloat(valorNumericoString.replace(',', '.'));
+        setValorPlanoBasico(valorNumerico)
+
+      })
+    }, [])
+
 
 
 
@@ -481,7 +544,26 @@ export default function Checkout(){
         clearMessages();
       }
     }, [errorsPedido, successPedido]);
+
+    async function createSignatureBuffet(id){
+      const data = {
+        "tipo": id,
+        "status": 'ACTIVE',
+        "valor": valorPlanoBasico,
+        "desconto": 1.22,
+        "id_plano": Number(localStorage?.getItem('ID_PLAN')),
+        "id_entidade": dataUser?.['entidade']?.id
+    }
+      PagBankService.createSignatureInBuffet(data)
+        .then(res=>{
+          console.log(res)
+        }).catch(err=>{
+          console.log(err)
+        })
+    }
   
+  
+    let name = '';
 
     useEffect(()=>{
       BuffetService.showBuffetByIdEntity(dataUser['entidade']?.id)
@@ -491,9 +573,17 @@ export default function Checkout(){
       }).catch(err=>{
         console.log(err)
       })
-    }, [])
- 
 
+     
+    }, [])
+
+
+
+      if(typeof window !== 'undefined'){
+        name = window?.localStorage?.getItem('USER_NAME');
+      }
+   
+ 
     return(
         <Box tag="main"
             styleSheet={{
@@ -511,7 +601,7 @@ export default function Checkout(){
             <ModalBudget isOpen={isModalOpenBudget} onClose={closeBudgetModal} />
           )}  
             {showConfirmationModal && <ConfirmationModal />}
-            {showNegationModal && <NegationModal />}
+          
 
           <Box styleSheet={{
               display:'flex',
@@ -534,8 +624,8 @@ export default function Checkout(){
                 Confirme a sua assinatura
               </Text>
               <Text variant="body1" styleSheet={{textAlign: 'left', padding: '.5rem'}} color={theme.colors.neutral.x300}>
-                {dataUser && dataUser?.['entidade']?.nome &&
-                  dataUser?.['entidade']?.nome
+                {name &&
+                  name
                 }, você selecionou o <Text tag="label" color={theme.colors.primary.x500}>Plano {selectedPlan['nome']? selectedPlan['nome'] : namePlan} !</Text>
               </Text>
 
@@ -667,8 +757,9 @@ export default function Checkout(){
                         type="phone"
                         disabled={successPedido}
                         required={true}
-                        onChange={(e)=>setTelefoneAssinante(e)}
-                        placeholder="XXXXXXXXX"
+                        onChange={(e)=>formatPhoneNumber(e)}
+                        value={telefoneAssinante}
+                        placeholder="X XXXXXXXX"
                         styleSheet={{
                           width: '70%',
                          padding: '.8rem',
@@ -718,26 +809,31 @@ export default function Checkout(){
                       type="text"
                       required={true}
                       disabled={successPedido}
-                      onChange={(e)=>setNumberCard(e)}
+                      onChange={(e)=>handleChangeNumeroCartao(e)}
                       placeholder="Digite o número do cartão"
                       styleSheet={{
                        padding: '.8rem',
+                       paddingLeft: `${bandeira === '' && '' || bandeira === 'mastercard' && '3.5rem'|| bandeira === 'visa' && '3.5rem'}`,
                         border: 'none',
+                        borderRadius: '6px',
+                        background: `URL(${bandeira === 'mastercard' && IconMastercard.src || bandeira === 'visa' && IconVisa.src || bandeira === '' && ''})`,
+                        backgroundRepeat: 'no-repeat',
                         backgroundColor: theme.colors.neutral.x050,
-                        borderRadius: '6px'
+                        backgroundPosition: '5px'
                       }}
                     />
+                   
                     </Box>
 
-                    
                     <Box>
                       <Text>Validade</Text>
                       <Input 
                       type="text"
-                      onChange={(e)=>setExpirationCard(e)}
+                      onChange={(e)=>handleChangeExpiration(e)}
+              
                       required={true}
                       disabled={successPedido}
-                      placeholder="xx/xxxx"
+                      placeholder="MM/AAAA"
                       styleSheet={{
                        padding: '.8rem',
                         border: 'none',
@@ -755,8 +851,9 @@ export default function Checkout(){
                       type="text"
                       required={true}
                       disabled={successPedido}
-                      placeholder="cvv"
-                      onChange={(e)=>setCvvCard(e)}
+                      placeholder="CVV"
+                      onChange={(e)=>formatCreditCardCvv(e)}
+                      value={cvvCard}
                       styleSheet={{
                        padding: '.8rem',
                         border: 'none',
@@ -857,11 +954,12 @@ export default function Checkout(){
                   padding: '2rem'
                 }}>
                 <Text variant="body2" styleSheet={{textAlign: 'left', padding: '.5rem 0'}} color={theme.colors.neutral.x000}>
-                  Valor da Assinatura
+                Valor da assinatura mensal
                 </Text>
                 <Text variant="heading2semiBold" styleSheet={{textAlign: 'left', padding: '.5rem 0'}} color={theme.colors.secondary.x700}>
                   { selectedPlan && selectedPlan?.['valor_mensal']? formatarMoeda(selectedPlan?.['valor_mensal']) : valuePlan}
                 </Text>
+              
                 <Input 
                     type="text"
                     placeholder="CUPOM DE DESCONTO"
@@ -872,15 +970,21 @@ export default function Checkout(){
                       borderRadius: '6px',
                     }}
                   />
-                <Text variant="body1" styleSheet={{textAlign: 'left', padding: '.5rem 0'}} color={theme.colors.neutral.x000}>
+                <Text variant="body1" styleSheet={{textAlign: 'left', padding: '1.5rem 0'}} color={theme.colors.neutral.x000}>
                   INFORMAÇÕES DO CARD
                 </Text>
+                <Text styleSheet={{color: theme.colors.neutral.x050, fontWeight: '500'}}>A cobrança da primeira fatura será efetuada após o período de teste.</Text>
                 <Box styleSheet={{
                   backgroundColor: theme.colors.primary.x600,
                   padding: '1rem',
                   borderRadius: '6px',
-                  marginTop: '.5rem'
+                  marginTop: '.5rem',
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: '.5rem'
                 }}>
+                  
                   <Icon name="default_icon" fill={theme.colors.neutral.x000}/>
                   <Box styleSheet={{display: 'flex', flexDirection: 'row', gap: '.4rem', flexWrap: 'wrap'}}>
                     <Text variant="body1" styleSheet={{textAlign: 'left', width: '95%'}} color={theme.colors.neutral.x000}>
@@ -892,7 +996,7 @@ export default function Checkout(){
                         target="_blank"
                         styleSheet={{color: theme.colors.secondary.x800, textDecoration: `underline 1px ${theme.colors.secondary.x700}`}}
                     >
-                      Contrato
+                      Contrato.
                     </Link>
                   </Box>
                 </Box>
@@ -903,7 +1007,7 @@ export default function Checkout(){
                 flexDirection: 'row',
                 gap: '2rem'
               }}>
-                <Button 
+                <BtnMaterial 
                   fullWidth 
                   type="submit"
                   variant="contained"
@@ -917,15 +1021,20 @@ export default function Checkout(){
                     fontWeight: '600'
                 }}>
                   Cancelar
-                </Button>
+                </BtnMaterial>
     
-                <Button 
+                <BtnMaterial 
                   type="submit" 
                   startIcon={isLoading ? <CircularProgress size={20} color="inherit" /> : null}
-                  disabled={isLoading}
+                  disabled={successPedido}
                   style={{padding: '20px', marginTop: '1rem',background: theme.colors.secondary.x500, color: 'white', borderRadius: '8px'}}>
                   <Text color="white">Concluir assinatura</Text>
-                </Button>
+                </BtnMaterial>
+
+                {successPedido && <Text onClick={(e)=>router.push('/dashboard/buffet')} color={theme.colors.secondary.x500} styleSheet={{cursor: 'pointer', marginTop: '1rem', fontSize: '.875rem', fontWeigth: '700', width: '80%', margin: '1rem auto', display:' flex', flexDirection: 'row', height: 'auto',justifyContent: 'left', alignItems: 'left'}}>
+            Ir para o dashboard <Text styleSheet={{cursor: 'pointer',fontSize: '1.4rem', marginLeft: '.7rem'}} color={theme.colors.secondary.x500} >{`>`}</Text>
+         </Text>}
+                
               </Box>
 
             <Box styleSheet={{marginTop: '1.5rem', marginLeft: '1rem'}}>
@@ -963,6 +1072,13 @@ export default function Checkout(){
                                    
                                     {item?.parameter_name === 'birth_date' &&
                                       'Data de nascimento inválida, tente novamente.'
+                                    }
+
+                                    {item?.parameter_name === 'payment_method[0].card.security_code' &&
+                                    item?.description === 
+                                      'Card security code is invalid. The code must contain at least 3 digits.'
+                                      &&
+                                      'Dados do cartão inválidos, verifique e tente novamente.'
                                     }
                                     {item?.parameter_name === 'billing_info[0].card.holder'
                                     || item?.parameter_name === 'billing_info[0].card.exp_month'

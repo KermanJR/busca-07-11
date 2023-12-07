@@ -26,30 +26,62 @@ export const Relacionados = ({data}) => {
   const [buffets, setBuffets] = useState([])
   const router = useRouter();
   const {
-    setIdBuffet
+    setIdBuffet,
+    setBuffetsRelacionados
   } = useContext(UserContext)
 
+  
 
-  const idCidadeBuffetCurrent = data?.entidade?.enderecos[0]?.endereco?.id_cidade;
-  const buffetsRelacionados = buffets.filter(buffet => {
-    const idCidadeBuffet = buffet?.entidade?.enderecos[0]?.endereco?.cidade?.id;
-    const isPremium = buffet?.entidade?.assinaturas?.some(
-      assinatura => assinatura?.tipo === 'M' && assinatura?.status === 'Aprovado'
-    );
 
-    return idCidadeBuffet === idCidadeBuffetCurrent && isPremium;
-  });
+  const idCidadeBuffetCurrent = data?.entidade?.enderecos[0]?.endereco?.cidade?.id;
+
+// Filtra os buffets premium na mesma cidade
+const buffetsPremium = buffets.filter(buffet => {
+  const idCidadeBuffet = buffet?.entidade?.enderecos[0]?.endereco?.cidade?.id;
+  const isPremium = buffet?.entidade?.assinaturas?.some(
+    assinatura => assinatura?.plano?.nome === 'Premium' && assinatura?.status === 'ACTIVE'
+  );
+  return idCidadeBuffet === idCidadeBuffetCurrent && isPremium;
+});
+
+// Se não houver buffets premium, filtra os buffets destacados na mesma cidade
+const buffetsDestacados = buffets.filter(buffet => {
+  const idCidadeBuffet = buffet?.entidade?.enderecos[0]?.endereco?.cidade?.id;
+  return idCidadeBuffet === idCidadeBuffetCurrent && buffet?.entidade?.destacado === '1';
+});
+
+// Use buffetsDestacados se não houver buffets premium
+const buffetsRelacionados: any = buffetsPremium.length > 0 ? buffetsPremium : buffetsDestacados;
+
+
+// Embaralhe os buffets relacionados para mostrar diferentes buffets
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+
+
+shuffleArray(buffetsRelacionados);
+
+// Agora 'buffetsRelacionados' contém os buffets exibidos aleatoriamente
+
+
 
  
-
- 
-
   useEffect(()=>{
     BuffetService.showBuffets()
       .then(res=>{
         setBuffets(res)
       })
   }, [])
+
+  useEffect(()=>{
+    setBuffetsRelacionados(buffetsRelacionados)
+  }, [buffetsRelacionados?.length> 0])
+
 
  
 
@@ -64,8 +96,6 @@ export const Relacionados = ({data}) => {
   function capitalizeFirstLetter(word) {
     return word?.charAt(0).toUpperCase() + word?.slice(1);
   }
-
-
 
 
 
@@ -99,11 +129,30 @@ export const Relacionados = ({data}) => {
                   objectFit: 'cover'
                 }}
                 alt="image-card-home"
-                src={`https://buscabuffet.com.br/api/uploads/${result?.['galerias'][1]?.['arquivo']?.['nome']}`}
+                src={`https://buscabuffet.com.br/api/uploads/${
+                  (result?.galerias?.find(image => image?.arquivo?.tipo === 'card') || {})?.arquivo?.nome
+                }`}
               />
 
-              {
-                result?.['entidade']?.['assinaturas'][0]?.['plano']?.['nome'] == 'Premium' ?
+{result?.entidade?.assinaturas[0]?.plano?.nome === 'Premium' ?
+                <Button
+                  styleSheet={{
+                    position: 'absolute',
+                    marginLeft: '1rem',
+                    marginTop: '1rem'
+                  }}
+                  size="lg"
+                  textVariant="body1"
+                  colorVariant="complementar"
+                >
+                  <Text variant="small" styleSheet={{ fontWeight: 'bold' }}>
+                    {result?.entidade?.assinaturas[0]?.plano?.nome}
+                  </Text>
+                </Button> : ''
+              }
+
+            {
+                result?.['entidade']?.['assinaturas'][0]?.['plano']?.['nome'] == 'Premium' &&  result?.['entidade']?.destacado == '1' && (
                 <Button 
                 styleSheet={{
                   position: 'absolute',
@@ -115,8 +164,25 @@ export const Relacionados = ({data}) => {
                   colorVariant="complementar"
               >
                 <Text variant="small" styleSheet={{fontWeight: 'bold'}}>
-                  {result?.['entidade']?.['assinaturas'][0]?.['plano']?.['nome']}</Text>
-              </Button>: ''
+                  {result?.['entidade']?.['assinaturas'][0]?.['plano']?.['nome']} | Destaque</Text>
+              </Button>)
+              }
+
+              {
+                result?.['entidade']?.destacado == '1' && (
+                <Button 
+                styleSheet={{
+                  position: 'absolute',
+                  marginLeft: '1rem',
+                  marginTop: '1rem'
+                  }} 
+                  size="lg" 
+                  textVariant="body1"
+                  colorVariant="complementar"
+              >
+                <Text variant="small" styleSheet={{fontWeight: 'bold'}}>
+                    Destaque</Text>
+              </Button>)
               }
              
             </Box>

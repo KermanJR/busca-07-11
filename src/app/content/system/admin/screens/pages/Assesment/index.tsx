@@ -52,7 +52,7 @@ const Assesment = () =>{
   };
   
 
-  console.log(buffets)
+ 
   const EventActionPopup = () => (
     <Box styleSheet={{ 
       width: '50px',

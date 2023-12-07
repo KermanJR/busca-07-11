@@ -9,6 +9,7 @@ import { ModalContext } from "@src/app/context/ModalContext";
 import useSize from "@src/app/theme/helpers/useSize";
 import useResponsive from "@src/app/theme/helpers/useResponsive";
 import ModalBudget from "../HomeScreen/Components/Modals/BudgetModal";
+import WhatsAppButton from "../HomeScreen/Components/WhatsappButton";
 
 export default function PoliticAndPrivacy(){
 
@@ -91,6 +92,7 @@ export default function PoliticAndPrivacy(){
                 publishing software like Aldus PageMaker including versions of Lorem Ipsum.
             </Text>
           </Box>
+          
         </Box>
     )
 

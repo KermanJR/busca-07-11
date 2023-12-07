@@ -25,12 +25,16 @@ const EditPerfil = () =>{
   const [aboutBuffet, setAboutBuffet] = useState<string>('');
   const [phoneBuffet, setPhoneBuffet] = useState<string>('');
   const [urlYoutube, setUrlYoutube] = useState<string>('');
+  const [urlInstagram, setUrlInstagram] = useState<string>('');
+  const [urlFacebook, setUrlFacebook] = useState<string>('');
+  const [urlSite, setUrlSite] = useState<string>('');
 
   const [attractionsBuffets, setAttractionsBuffets] = useState<[]>([]);
   const [securityBuffets, setSecurityBuffets] = useState<[]>([]);
   const [servicesBuffets, setServicesBuffets] = useState<[]>([]);
-  const [categoriasBuffet, setCategoriasBuffet] = useState([]);
-  const [categoriasBuffetById, setCategoriasBuffetById] = useState<[]>([]);
+  const [categoriesBuffets, setCategoriesBuffets] = useState<[]>([]);
+
+  const [categoriesBuffetsById, setCategoriesBuffetsById] = useState<[]>([]);
 
   const [youtube, setYoutube] = useState('')
   const [isLoading, setIsLoading] = useState(false);
@@ -42,10 +46,6 @@ const EditPerfil = () =>{
 
 
   const [detailsBuffet, setDetailsBuffet] = useState([]);
-
-
-
-
   const [idDetailsBuffet, setIdDetailsBuffet] = useState([]);
   const [idBuffetLocal, setIdBuffetLocal] = useState('');
   const [hoursWeek, setHoursWeek] = useState<string>('');
@@ -73,14 +73,11 @@ const EditPerfil = () =>{
   const [idEstado, setIdEstado] = useState<number>(null);
 
 
-
-
   const [selectedCategoria, setSelectedCategoria] = useState(null);
 
 
   //Estados que estão no banco de dados
   const [states, setStates] = useState([]);
-
 
 
   //Variável de controle: EDIÇÃO || CRIAÇÃO do buffet
@@ -94,20 +91,16 @@ const EditPerfil = () =>{
   //Variável de controle: EDIÇÃO || CRIAÇÃO do endereço do buffet
   const [modeAddress, setModeAddress] = useState('create');
   
-    
-  //Variável de controle: EDIÇÃO || CRIAÇÃO do endereço do buffet
-  const [modeCategoria, setModeCategoria] = useState('create');
-
 
   const [hoveredEvent, setHoveredEvent] = useState(false);
 
-  const [selectedOptions, setSelectedOptions] = useState([]);
 
   //Contexts
   const {
     dataUser,
     setIdBuffet,
-    idBuffet
+    idBuffet,
+    dataBuffet, setDataBuffet
   } = useContext(UserContext);
 
   
@@ -157,9 +150,9 @@ const EditPerfil = () =>{
   })
   .filter((service) => service !== null); 
 
-  let selectedCategoriesBuffet: any = categoriasBuffetById
-  ?.map((userService) => {
-    const matchingService = categoriasBuffet?.find(
+  let selectedCategoriesBuffet: any = categoriesBuffetsById
+  .map((userService) => {
+    const matchingService = categoriesBuffets.find(
       (categoria) => categoria?.['id'] === userService?.['id_categoria']
     );
     return matchingService
@@ -170,11 +163,6 @@ const EditPerfil = () =>{
       : null; 
   })
   .filter((categoria) => categoria !== null); 
-
- 
-
-  console.log(categoriasBuffet)
-  console.log(categoriasBuffetById)
 
 
 
@@ -206,10 +194,7 @@ const EditPerfil = () =>{
       id_servico: null,
       id_atracao: attractive?.value,
     }));
-
     let combinedArray = [...servicesArray, ...attractivesArray, ...securityArray];
-
-
     await BuffetService.postAttractionsServicesBuffets({
       id_buffet: idBuffetLocal,
       items: combinedArray,
@@ -226,48 +211,37 @@ const EditPerfil = () =>{
       });
   }
 
-
-  //EDITAR DETALHES DO BUFFET SERVIÇOS && ATRATIVOS
-  async function EditDetailsBuffet(){
-    let servicesArray = auxServicesBuffets.map((service) => ({
-      id_buffet: idBuffet,
-      id_servico: service?.value,
-      id_atracao: null,
-    }))
-
-    let attractivesArray = auxAttractiveBuffets.map((attractive) => ({
-      id_buffet: idBuffet,
-      id_servico: null,
-      id_atracao: attractive?.value,
-    }));
-
-    let combinedArray = [...servicesArray, ...attractivesArray];
-    combinedArray.forEach((item, index) => {
-      item['id'] = detailsBuffet[index]?.id; // Adiciona a propriedade "id" como um valor numérico
-    });
-
-
-
-
-    detailsBuffet.map((item)=>(
-      BuffetService.editAttractionsServicesBuffets(item?.['id'], {
-        id_buffet: idBuffet,
-        items: combinedArray.map((item)=>(
-          item
-        ))
+  //CRIAR DETALHES DO BUFFET SERVIÇOS && ATRATIVOS
+  async function CreateCategoryBuffet(id){
+    await BuffetService.deleteCategoriesBuffets(idBuffet)
+      .then((response) => {
+        console.log(response)
       })
-        .then((response) => {
-          setAuxAttractivesBuffet([])
-          setAuxServicesBuffet([])
-        })
-        .catch((error) => {
-          console.log(error);
-        })
-    ))
-    
+      .catch((error) => {
+        console.log(error);
+      });
+
+
+    let categoriesArray = auxCategoriesBuffets.map((attractive) => (
+      BuffetService.postCategoriaBuffet({
+        id_buffet: id,
+        id_categoria: attractive?.value,
+      }).then((response) => {
+       
+        setAuxCategoriesBuffet([])
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+    ));
+
   }
 
 
+
+
+
+  //CRIAR ENDEREÇO DO BUFFET
   async function CreateAddressBuffet(){
     BuffetService.createAddressBuffets(dataUser?.['entidade']?.id, {
       id_cidade: idCidade,
@@ -286,6 +260,34 @@ const EditPerfil = () =>{
       console.log(error)
     })
   }
+
+  
+  async function EditAddressBuffet(){
+    BuffetService.editAddressBuffets(idAddress, {
+      id_cidade: idCidade,
+      cep: cep,
+      bairro: bairro,
+      complemento: complemento,
+      rua: rua,
+      numero: numero,
+      contato: " ",
+      telefone: phoneBuffet,
+      email: "",
+      tipo: "C"
+    }).then((response)=>{
+      setRua(response?.rua)
+      setBairro(response?.bairro)
+      setCidade(response?.entidade?.enderecos[0].endereco.cidade.nome)
+      setNumero(response?.numero)
+      setCep(response?.cep)
+      setIdCidade(response?.id_cidade)
+      setAddressBuffet(response?.entidade?.enderecos);
+      setIdAddress(response?.id);
+    }).catch((error)=>{
+      console.log(error)
+    })
+  }
+  
 
 
 
@@ -306,20 +308,28 @@ const EditPerfil = () =>{
       status: 'I',
       redes_sociais: [
         {
-            "descricao": "https://www.youtube.com/",
-            "tipo": urlYoutube? urlYoutube: 'Nenhum'
-        }
+            "descricao": urlInstagram,
+            "tipo": "instagram"
+        },
+        {
+          "descricao": urlFacebook,
+          "tipo": "facebook"
+      },
+      {
+        "descricao": urlSite,
+        "tipo": "site"
+      }
       ]
     })
     .then(async (response)=>{
       if(response?.id){
         setIdBuffetLocal(response?.id)
         setIdBuffet(response?.id)
+        setDataBuffet(response);
         await CreateDetailsBuffet(response?.id);
         await CreateAddressBuffet();
-        await CreateCategoryBuffet()
+        await CreateCategoryBuffet(response?.id)
         setMessage('Dados salvos com sucesso.');
-        
       }
     }).catch((error)=>{
       setMessage('Erro ao salvar dados, tente novamente.');
@@ -328,24 +338,8 @@ const EditPerfil = () =>{
     setIsLoading(false);
   }
 
-  async function CreateCategoryBuffet(){
-    let categoriesArray = auxCategoriesBuffets.map((categoria) => ({
-      id_buffet:  idBuffet,
-      id_categoria: categoria?.value
-    }))
 
-    categoriesArray?.map((item, index)=>{
-      BuffetService.postCategoriaBuffet({
-        id_buffet: item?.id_buffet,
-        id_categoria: item?.id_categoria,
-      })
-        .then(res=>{
-          console.log(res)
-        }).catch(err=>{
-          console.log(err)
-        })
-    })
-  }
+  //CRIAR CATEGORIAS DO BUFFET
 
   //EDITAR BUFFET
   function EditBuffet(e: any){
@@ -360,16 +354,24 @@ const EditPerfil = () =>{
       horario_atendimento_fds: hoursWeekend,
       youtube: youtube,
       status: 'A',
-      
       redes_sociais: [
         {
-            "descricao": "https://www.youtube.com/",
-            "tipo": urlYoutube? urlYoutube: 'Nenhum'
-        }
+            "descricao": urlInstagram,
+            "tipo": "instagram"
+        },
+        {
+          "descricao": urlFacebook,
+          "tipo": "facebook"
+      },
+      {
+        "descricao": urlSite,
+        "tipo": "site"
+      }
       ]
     })
     .then(async (response)=>{
       if(response?.id){
+        setDataBuffet(response)
         setAreaTotal(response?.area_total);
         setAboutBuffet(response?.sobre);
         setCapacityTotalBuffet(response?.capacidade_total);
@@ -380,7 +382,7 @@ const EditPerfil = () =>{
         setAddressBuffet(response?.entidade?.enderecos);
         setMessage('Dados salvos com sucesso.')
         await CreateDetailsBuffet(response?.id)
-        await CreateCategoryBuffet()
+        await CreateCategoryBuffet(response?.id)
         modeAddress === 'create' ? await CreateAddressBuffet() : await EditAddressBuffet();
       }
     }).catch((error)=>{
@@ -420,13 +422,15 @@ const EditPerfil = () =>{
         setTypeSignatue(response?.entidade?.assinaturas[0]?.plano?.nome);
         setSelectedCategoria(response?.categorias[0]?.categoria?.id)
         setYoutube(response?.youtube)
+        setUrlInstagram(response?.entidade?.redesSociais[0]?.tipo === 'instagram'? response?.entidade?.redesSociais[0]?.descricao: '');
+        setUrlFacebook(response?.entidade?.redesSociais[1]?.descricao);
+        setUrlSite(response?.entidade?.redesSociais[2]?.descricao);
         if(response?.entidade?.enderecos.length > 0){
           setModeAddress('edit')
         }
       }else{
         setModeBuffet('create')
       }
-  
     })
     .catch((error) => {
       console.error('Erro ao buscar dados do Buffet:', error);
@@ -465,18 +469,6 @@ const EditPerfil = () =>{
       const sortedSecuritiesBuffets = response.sort((a, b) => a.nome.localeCompare(b.nome));
       setSecurityBuffets(sortedSecuritiesBuffets);
 
-    })
-    .catch((error) => {
-      console.error('Erro ao buscar items de segurança para os Buffets:', error);
-    });
-  }
-
-  function showCategoriasBuffets(){
-    BuffetService.getCategoriasBuffet()
-    .then((response) => {
-      const sortedCategoriasBuffets = response.sort((a, b) => a.nome.localeCompare(b.nome));
-      setCategoriasBuffet(sortedCategoriasBuffets);
-
     
     })
     .catch((error) => {
@@ -484,6 +476,17 @@ const EditPerfil = () =>{
     });
   }
 
+  //RETORNA AS CATEGORIAS FIXAAS NO BANCO DE DADOS
+  function showCategoriasBuffet(){
+    BuffetService.getCategoriasBuffet()
+    .then((response) => {
+      const sortedCategoriasBuffets = response.sort((a, b) => a.nome.localeCompare(b.nome));
+      setCategoriesBuffets(sortedCategoriasBuffets);
+    })
+    .catch((error) => {
+      console.error('Erro ao buscar items de segurança para os Buffets:', error);
+    });
+  }
 
   
   //RETORNA OS DETALHES CADASTRADOS PARA O BUFFET PELO SEU ID
@@ -502,16 +505,17 @@ const EditPerfil = () =>{
       });
   }
 
-  function showCategoriesBuffetByIdd() {
-    BuffetService.showCategoriesBuffetById(idBuffet)
+  function showCategoriesBuffetById() {
+    BuffetService.getCategoriesBuffetsById(idBuffet)
       .then((response) => {
-       
-        const normalizedArray: any = [];
-        response?.forEach(item => {
-          const values = Object.values(item);
-           normalizedArray.push(...values);
-        });
-        setCategoriasBuffetById(normalizedArray);
+        let vetor: any = [];
+        for (const elemento of response) {
+          for (const valor of Object.values(elemento)) {
+            vetor.push(valor);
+          }
+        }
+        setCategoriesBuffetsById(vetor);
+        console.log(vetor)
       })
       .catch((error) => {
         console.error('Erro ao buscar categorias do Buffet:', error);
@@ -521,32 +525,6 @@ const EditPerfil = () =>{
 
  
 
-  async function EditAddressBuffet(){
-    BuffetService.editAddressBuffets(idAddress, {
-      id_cidade: idCidade,
-      cep: cep,
-      bairro: bairro,
-      complemento: complemento,
-      rua: rua,
-      numero: numero,
-      contato: " ",
-      telefone: phoneBuffet,
-      email: "",
-      tipo: "C"
-    }).then((response)=>{
-      setRua(response?.rua)
-      setBairro(response?.bairro)
-      setCidade(response?.entidade?.enderecos[0].endereco.cidade.nome)
-      setNumero(response?.numero)
-      setCep(response?.cep)
-      setIdCidade(response?.id_cidade)
-      setAddressBuffet(response?.entidade?.enderecos);
-      setIdAddress(response?.id);
-    }).catch((error)=>{
-      console.log(error)
-    })
-  }
-  
 
   function showStateBd(){
     BuffetService.showStatesBd()
@@ -586,13 +564,13 @@ const EditPerfil = () =>{
     showServicesBuffets();
     showSecurityBuffets();
     showStateBd();
-    showCategoriasBuffets();
-    showCategoriesBuffetByIdd();
+    showCategoriasBuffet();
+
   }, []);
 
   useEffect(()=>{
     showDetailsBuffetById();
-    
+    showCategoriesBuffetById();
   }, [idBuffet != null])
 
   useEffect(() => {
@@ -650,18 +628,21 @@ const EditPerfil = () =>{
   const formatPhoneNumber = (input) => {
     // Remove todos os caracteres não numéricos
     const cleaned = input.replace(/\D/g, '');
-
+  
+    // Limita o número de caracteres a 13
+    const truncated = cleaned.slice(0, 11);
+  
     // Aplica a máscara para formatar o número de telefone
-    if (cleaned.length === 0) {
+    if (truncated.length === 0) {
       setPhoneBuffet('');
-    } else if (cleaned.length <= 2) {
-      setPhoneBuffet(`(${cleaned}`);
-    } else if (cleaned.length <= 3) {
-      setPhoneBuffet(`(${cleaned.slice(0, 2)}) ${cleaned.slice(2)}`);
-    } else if (cleaned.length <= 7) {
-      setPhoneBuffet(`(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 3)} ${cleaned.slice(3)}`);
+    } else if (truncated.length <= 2) {
+      setPhoneBuffet(`(${truncated}`);
+    } else if (truncated.length <= 3) {
+      setPhoneBuffet(`(${truncated.slice(0, 2)}) ${truncated.slice(2)}`);
+    } else if (truncated.length <= 7) {
+      setPhoneBuffet(`(${truncated.slice(0, 2)}) ${truncated.slice(2, 3)} ${truncated.slice(3)}`);
     } else {
-      setPhoneBuffet(`(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 3)} ${cleaned.slice(3, 7)} ${cleaned.slice(7)}`);
+      setPhoneBuffet(`(${truncated.slice(0, 2)}) ${truncated.slice(2, 3)} ${truncated.slice(3, 7)} ${truncated.slice(7)}`);
     }
   };
 
@@ -737,16 +718,19 @@ const EditPerfil = () =>{
      <Text variant="heading4Bold" color={theme.colors.neutral.x999}>Informações Técnicas</Text>
 
      <Box styleSheet={{display: 'grid', gridTemplateColumns: '30% 30% 30%', gap: '2rem', padding: '1rem 0 1rem 0'}}>
-       
-
         <Box>
-        <Text>Categoria</Text>
-        <SelectWithClickToAddCategory
-          options={categoriasBuffet}
-          selectedServicesBuffet={selectedCategoriesBuffet}
+          <Text>Categoria do Buffet</Text>
+
+          <Box>
+     
+        <SelectWithClickToAddCategory 
+          options={categoriesBuffets} 
+          selectedCategoriesBuffet={selectedCategoriesBuffet}
           setAuxCategoryBuffets = {setAuxCategoriesBuffet}
         />
       </Box>
+        
+        </Box>
         <Box>
           <Text>Capacidade Total</Text>
           <InputDash placeholder="Digite a capacidade Total" type="number" value={capacityTotalBuffet} onChange={setCapacityTotalBuffet} required={true}/>
@@ -765,20 +749,33 @@ const EditPerfil = () =>{
           <Text>Horário Atendimento (Fim de semana)</Text>
           <InputDash placeholder="Atendimento: Fim de semana" type="text" value={hoursWeekend} onChange={setHoursWeekend} required={true}/>
         </Box>
-     </Box>
-
-     <Box styleSheet={{display: 'grid', gridTemplateColumns: '30% 20% 20% 23%', gap: '2rem', padding: '1rem 0 1rem 0'}}>
         <Box>
           <Text>Telefone</Text>
           <InputDash placeholder="Digite seu telefone" type="text" value={phoneBuffet}  onChange={(e) => formatPhoneNumber(e)} required={true}/>
         </Box>
+     </Box>
+
+     <Box styleSheet={{display: 'grid', gridTemplateColumns: '20% 20% 20% 20%', gap: '2rem', padding: '1rem 0 1rem 0'}}>
         {typeSignature === 'Premium'? 
         <Box>
           <Text>URL Youtube</Text>
           <InputDash placeholder="Digite a URL do youtube" type="text"  value={youtube} onChange={(e)=>setYoutube(e)} />
         </Box>: ''
         }
-        
+
+        <Box>
+          <Text>Instagram</Text>
+          <InputDash placeholder="instagram.com/seuperfil" type="text" value={urlInstagram}  onChange={(e) => setUrlInstagram(e)} required={true}/>
+        </Box>
+
+        <Box>
+          <Text>Facebook</Text>
+          <InputDash placeholder="facebook.com/seuperfil" type="text" value={urlFacebook}  onChange={(e) => setUrlFacebook(e)} required={true}/>
+        </Box>
+        <Box>
+          <Text>URL Site</Text>
+          <InputDash placeholder="www.seusite.com.br" type="text" value={urlSite}  onChange={(e) => setUrlSite(e)} required={true}/>
+        </Box>
      </Box>
 
      <Box styleSheet={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '2rem', padding: '1rem 0 1rem 0'}}>

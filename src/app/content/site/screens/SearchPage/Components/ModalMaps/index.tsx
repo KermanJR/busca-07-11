@@ -7,6 +7,8 @@ import useSize from '@src/app/theme/helpers/useSize';
 Modal.setAppElement('#__next'); // Define o elemento raiz do aplicativo
 
 const MapModal = ({ isOpen, onRequestClose, coordinates }) => {
+
+
   const size = useSize()
   return (
     <Box styleSheet={{
@@ -36,9 +38,9 @@ const MapModal = ({ isOpen, onRequestClose, coordinates }) => {
             }
           }}
         >
-          <MapComponent coordinates={coordinates}/>
+          <MapComponent coordinates={coordinates?.length > 1? coordinates?.map((item, index)=>(item)):coordinates}/>
         </Modal>):
-            <MapComponent coordinates={coordinates}/>
+            <MapComponent coordinates={coordinates?.length > 1? coordinates?.map((item, index)=>(item)):coordinates}/>
         }
     </Box>
   );

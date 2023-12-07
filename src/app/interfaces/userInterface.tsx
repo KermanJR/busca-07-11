@@ -13,10 +13,11 @@ export interface UserState {
   selectedPlan: [];
   selectedAttractives: [];
   selectedServices: [];
+  buffetsRelacionados: [];
   dataUser: [];
   dataCupons: [];
   email: string;
-  selectedCategory: string;
+  selectedCategory: string[];
   password: string;
   errorLogin: string;
   successLogin: string;
@@ -47,13 +48,14 @@ export interface UserSetters {
   setSelectedPlan: React.Dispatch<React.SetStateAction<[]>>;
   setPassword: React.Dispatch<React.SetStateAction<string>>;
   setSelectedCity: React.Dispatch<React.SetStateAction<string>>;
-  setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
+  setSelectedCategory: React.Dispatch<React.SetStateAction<[]>>;
   setSelectedState: React.Dispatch<React.SetStateAction<string>>;
   setIdPerfil: React.Dispatch<React.SetStateAction<number>>;
   setIdEvent: React.Dispatch<React.SetStateAction<number>>;
   setIdBuffet: React.Dispatch<React.SetStateAction<number>>;
   setSelectedAttractives: React.Dispatch<React.SetStateAction<[]>>;
   setDataBuffet: React.Dispatch<React.SetStateAction<[]>>;
+  setBuffetsRelacionados: React.Dispatch<React.SetStateAction<[]>>;
   setSelectedServices: React.Dispatch<React.SetStateAction<[]>>;
   setSelectedServicesAndAttractives: React.Dispatch<React.SetStateAction<[]>>;
   setSlugBuffet: React.Dispatch<React.SetStateAction<string>>;

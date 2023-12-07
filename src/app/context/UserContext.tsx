@@ -34,13 +34,14 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     const [selectedPlan, setSelectedPlan]= useState<[]>([]);
     const [selectedCity, setSelectedCity]= useState('');
     const [selectedState, setSelectedState]= useState(null);
-    const [selectedCategory, setSelectedCategory]= useState('');
+    const [selectedCategory, setSelectedCategory]= useState<[]>([]);
     const [selectedAttractives, setSelectedAttractives]= useState<[]>([]);
     const [selectedServices, setSelectedServices]= useState<[]>([]);
     const [selectedServicesAndAttractives, setSelectedServicesAndAttractives]= useState<[]>([]);
     const [id_perfil, setIdPerfil] = useState<number>(1);
     const [idBuffet, setIdBuffet] = useState<number>(null);
     const [idEvent, setIdEvent] = useState<number>(null);
+    const [buffetsRelacionados, setBuffetsRelacionados] = useState<[]>([])
 
     const [errorLogin, setErrorLogin] = useState('');
     const [successLogin, setSuccessLogin] = useState('');
@@ -134,6 +135,8 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
             idEvent,
             errorLogin,
             successLogin,
+            buffetsRelacionados,
+            setBuffetsRelacionados,
             setErrorLogin,
             setSuccessLogin,
             login, 

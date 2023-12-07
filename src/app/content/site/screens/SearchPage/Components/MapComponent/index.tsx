@@ -20,11 +20,15 @@ const MapComponent = ({coordinates}) => {
 
   //let ceps = dataBuffet.map((objeto) => objeto['entidade']['enderecos'][0]['endereco']['cep']);
 
+coordinates.map((item, index)=>{
 
+  })
   const center = {
-    lat: Number(coordinates[0]?.latitude),
-    lng: Number(coordinates[0]?.longitude)
+    lat: Number(coordinates?.length > 1? coordinates?.map((item, index)=>(item?.latitude)): coordinates[0]?.latitude),
+    lng: Number(coordinates?.length > 1? coordinates?.map((item, index)=>(item?.longitude)): coordinates[0]?.longitude)
   };
+
+
 
   /*const customIcon = {
     url: IconLoc.src, // Substitua pelo caminho para o seu ícone personalizado

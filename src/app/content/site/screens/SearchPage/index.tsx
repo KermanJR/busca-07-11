@@ -13,6 +13,7 @@ import useSize from "@src/app/theme/helpers/useSize";
 import ModalBudget from "../HomeScreen/Components/Modals/BudgetModal";
 import BuffetService from "@src/app/api/BuffetService";
 import ModalRecoveryPassword from "../HomeScreen/Components/Modals/RecoveryPassword";
+import WhatsAppButton from "../HomeScreen/Components/WhatsappButton";
 
 export default function AdvertiseWithUsScreen(){
 
@@ -87,6 +88,7 @@ export default function AdvertiseWithUsScreen(){
         <FormSearch buttonLabel="Buscar"/>
       </Box>
     </Box>
+   
     </Box>
   )
 }

@@ -218,20 +218,22 @@ const Homedash = () =>{
           </TableHead>
 
           <TableBody>
-            {viewPayments.slice(viewElements, viewElements + 20).map((item, index)=>(
-              <TableRow key={index} styleSheet={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-                <TableCell>{item?.['id']}</TableCell>
-                <TableCell>{new Date(item?.['updated_at']).toLocaleDateString()}</TableCell>
-                <TableCell>{item?.['entidade']['nome']}</TableCell>
-                <TableCell>R$ {item?.['valor']}</TableCell>
-                <TableCell>R$ {item?.['desconto']}</TableCell>
+            {viewPayments.slice(viewElements, viewElements + 10).map((item, index)=>(
+              <TableRow key={index} styleSheet={{display: 'flex', flexDirection: 'row', justifyContent: 'none', gap: 'none'}}>
+                <TableCell styleSheet={{ width: '16.6%'}}>{item?.['id']}</TableCell>
+                <TableCell  styleSheet={{  width: '18.6%'}}>{new Date(item?.['updated_at']).toLocaleDateString()}</TableCell>
+                <TableCell  styleSheet={{  width: '19.6%'}}>{item?.['entidade']['nome']}</TableCell>
+                <TableCell  styleSheet={{  width: '18.6%'}}>R$ {item?.['valor']}</TableCell>
+                <TableCell  styleSheet={{  width: '16.6%'}}>R$ {item?.['desconto']}</TableCell>
 
                 {item.status == "Nova assinatura" && (
                   <Box tag="td"
                   styleSheet={{
                     padding: '.7rem',
                     borderRadius: '10px',
-                    backgroundColor: theme.colors.secondary.x1600
+                    backgroundColor: theme.colors.secondary.x1600,
+           
+                    width: '16.6%'
                   }}    
                 >
                   <Text styleSheet={{
@@ -250,7 +252,9 @@ const Homedash = () =>{
                   styleSheet={{
                     padding: '.7rem',
                     borderRadius: '10px',
-                    backgroundColor: theme.colors.positive.x050
+                    backgroundColor: theme.colors.positive.x050,
+                 
+                    width: '10.6%'
                   }}    
                 >
                   <Text styleSheet={{

@@ -9,6 +9,7 @@ import ModalRegister from "../HomeScreen/Components/Modals/RegisterModal";
 import ModalLogin from "../HomeScreen/Components/Modals/LoginModal";
 import useSize from "@src/app/theme/helpers/useSize";
 import ModalBudget from "../HomeScreen/Components/Modals/BudgetModal";
+import WhatsAppButton from "../HomeScreen/Components/WhatsappButton";
 
 export default function TermsOfUse(){
 
@@ -94,6 +95,7 @@ export default function TermsOfUse(){
                 publishing software like Aldus PageMaker including versions of Lorem Ipsum.
             </Text>
           </Box>
+          
         </Box>
     )
 

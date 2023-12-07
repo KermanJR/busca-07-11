@@ -7,9 +7,9 @@ import Select from "react-select";
 
 
 
-const SelectWithClickToAddCategory = ({options, selectedServicesBuffet, setAuxCategoryBuffets}) => {
+const SelectWithClickToAddCategory = ({options, selectedCategoriesBuffet, setAuxCategoryBuffets}) => {
 
-  const [selectedOptions, setSelectedOptions] = useState(selectedServicesBuffet);
+  const [selectedOptions, setSelectedOptions] = useState(selectedCategoriesBuffet);
   const selectedOptionsRef = useRef(selectedOptions);
 
   const handleChange = (selectedOption) => {
@@ -17,20 +17,20 @@ const SelectWithClickToAddCategory = ({options, selectedServicesBuffet, setAuxCa
   };
 
   const handleRemoveOption = (optionToRemove) => {
-    const updatedOptions = selectedOptions.filter(
+    const updatedOptions = selectedOptions?.filter(
       (option) => option.value !== optionToRemove.value
     );
     setSelectedOptions(updatedOptions);
   };
 
-  const mappedOptions = options.map((option) => ({
+  const mappedOptions = options?.map((option) => ({
     value: option.id,
     label: option.nome,
   }));
 
   useEffect(() => {
-    setSelectedOptions(selectedServicesBuffet);
-  }, [selectedServicesBuffet.length > 0]);
+    setSelectedOptions(selectedCategoriesBuffet);
+  }, [selectedCategoriesBuffet?.length > 0]);
 
   useEffect(() => {
     selectedOptionsRef.current = selectedOptions;
@@ -59,7 +59,7 @@ const SelectWithClickToAddCategory = ({options, selectedServicesBuffet, setAuxCa
         }}
       />
       <Box>
-        {selectedServicesBuffet.map((option) => (
+        {selectedCategoriesBuffet?.map((option) => (
           <Text
             key={option?.id}
             onClick={() => handleRemoveOption(option)}

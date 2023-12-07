@@ -15,6 +15,7 @@ import ModalBudget from "../HomeScreen/Components/Modals/BudgetModal";
 import Image from "@src/app/theme/components/Image/Image";
 import Logo from '../../../../../../public/assets/logo_buffet.svg'
 import ModalRecoveryPassword from "../HomeScreen/Components/Modals/RecoveryPassword";
+import WhatsAppButton from "../HomeScreen/Components/WhatsappButton";
 export default function Contact(){
 
     const isMobile = useResponsive()
@@ -184,6 +185,7 @@ export default function Contact(){
           <Box>
         </Box>
       </Box>
+     
     </Box>
     )
 

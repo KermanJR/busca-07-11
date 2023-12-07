@@ -31,6 +31,7 @@ import FundoLogin2 from '../../../../../../public/assets/images/fundo-login2.jpg
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import ModalRecoveryPassword from "../HomeScreen/Components/Modals/RecoveryPassword";
+import WhatsAppButton from "../HomeScreen/Components/WhatsappButton";
 
 export default function LoginBuffet() {
   const theme = useTheme();
@@ -142,7 +143,7 @@ export default function LoginBuffet() {
         <ul>
           <li style={{display: 'flex', width: 'auto', alignItems: 'center'}}>
             <BsCheck style={{display: 'inline-block', width: !(size < 350) ? '50px' : '30px', fill: theme.colors.secondary.x500}}/>
-            <p style={{width: 'auto', fontWeight: !(size < 1230) ? 'bold' : '500', color: '#fff', fontSize: !(size < 350) ? '1.2rem' : '0.6rem'}}>Seu negócio exposto para o público alvo do seu negócio.</p>
+            <p style={{width: 'auto', fontWeight: !(size < 1230) ? 'bold' : '500', color: '#fff', fontSize: !(size < 350) ? '1.2rem' : '0.6rem'}}>Sua empresa em evidência.</p>
           </li>
           <li style={{display: 'flex', alignItems: 'center'}}>
             <BsCheck style={{display: 'inline-block', width: !(size < 350) ? '50px' : '30px', fill: theme.colors.secondary.x500}}/>
@@ -158,7 +159,7 @@ export default function LoginBuffet() {
           </li>
           <li style={{display: 'flex', alignItems: 'center'}}>
             <BsCheck style={{display: 'inline-block', width: !(size < 350) ? '50px' : '30px', fill: theme.colors.secondary.x500}}/>
-            <p style={{width: 'auto', fontWeight: !(size < 1230) ? 'bold' : '500', color: '#fff', fontSize: !(size < 350) ? '1.2rem' : '0.6rem'}}>Sem fidelidade, cancele quando quiser.</p>
+            <p style={{width: 'auto', fontWeight: !(size < 1230) ? 'bold' : '500', color: '#fff', fontSize: !(size < 350) ? '1.2rem' : '0.6rem'}}>Cancele quando quiser, sem multa.</p>
           </li>
           <li>
           <Button
@@ -274,28 +275,29 @@ export default function LoginBuffet() {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        gap: '20px',
-        padding: '8rem 10px'
+        gap: '5rem',
+        padding: '5rem 10px',
+        height: '350px'
       }}>
-        <Box styleSheet={{width: '20%', minWidth: '180px', maxWidth: '400px'}}>
+        <Box styleSheet={{width: '20%', minWidth: '180px', maxWidth: '350px'}}>
           <Image src={IconLoginBuffet1.src} alt="Icon" styleSheet={{width: '40%', margin: '0 auto', objectFit: 'contain'}}/>
           <Text styleSheet={{textAlign: 'center'}}>
             Receba solicitações de orçamento dos clientes interessados em realizar um evento.
           </Text>
         </Box>
-        <Box styleSheet={{width: '20%', minWidth: '180px', maxWidth: '400px'}}>
+        <Box styleSheet={{width: '20%', minWidth: '180px', maxWidth: '350px'}}>
           <Image src={IconLoginBuffet2.src} alt="Icon" styleSheet={{width: '40%', margin: '0 auto', objectFit: 'contain'}}/>
           <Text styleSheet={{textAlign: 'center'}}>
             Aumente a visibilidade da sua empresa na internet e seja visto por mais clientes.
           </Text>
         </Box>
-        <Box styleSheet={{width: '20%', minWidth: '180px', maxWidth: '400px'}}>
+        <Box styleSheet={{width: '20%', minWidth: '180px', maxWidth: '350px'}}>
           <Image src={IconLoginBuffet3.src} alt="Icon" styleSheet={{width: '40%', margin: '0 auto', objectFit: 'contain'}}/>
           <Text styleSheet={{textAlign: 'center'}}>
             Exponha sua empresa para o público alvo do seu negócio e obtenha melhores resultados.
           </Text>
         </Box>
-        <Box styleSheet={{width: '20%', minWidth: '180px', maxWidth: '400px'}}>
+        <Box styleSheet={{width: '20%', minWidth: '180px', maxWidth: '350px'}}>
           <Image src={IconLoginBuffet4.src} alt="Icon" styleSheet={{width: '40%', margin: '0 auto', objectFit: 'contain'}}/>
           <Text styleSheet={{textAlign: 'center'}}>
             Gerencie seus clientes e solicitações de orçamento através da nossa plataforma.
@@ -376,6 +378,7 @@ export default function LoginBuffet() {
         </Button>
         </Box>
       </Box>
+
     </Box>
   )
 }

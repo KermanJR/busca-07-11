@@ -104,7 +104,6 @@ const {
   function getEventsByStatus(){
     BuffetService.showEventsByStatus(dataUser?.['entidade']?.id)
     .then(res=>{
-      console.log(res)
       setPropostas(res);
     }).catch(err=>{
       console.log(err)

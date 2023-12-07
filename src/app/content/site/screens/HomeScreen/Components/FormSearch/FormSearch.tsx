@@ -10,28 +10,60 @@ import { UserContext } from "@src/app/context/UserContext";
 import { useRouter } from "next/dist/client/router";
 import BuffetService from "@src/app/api/BuffetService";
 import arrowDown from "../../../../../../../../public/assets/icons/arrow_down.jpg"
+import CategoryFilter from "./CategoryFilter";
 export default function FormSearch(){
 
-  const categories = [
+  const categories1 = [
     {
-      value: '1',
-      label: 'Infantil'
+      value: '8',
+      label: 'Aniversário'
     },
     {
-      value: '2',
-      label: 'Domicílio'
+      value: '9',
+      label: 'Bar e Bat Mitzvah'
     },
     {
       value: '3',
       label: 'Casamento'
     },
     {
+      value: '5',
+      label: 'Debutante'
+    },
+    {
+      value: '2',
+      label: 'Domicílio'
+    },
+    {
+      value: '1',
+      label: 'Festa infantil'
+    },
+    {
+      value: '7',
+      label: 'Formatura'
+    },
+  ]
+
+  const categories2 = [
+    {
+      value: '10',
+      label: 'Almoço/Jantar empresarial'
+    },
+    {
       value: '4',
       label: 'Confraternização'
     },
     {
-      value: '5',
-      label: 'Outros'
+      value: '11',
+      label: 'Palestra'
+    },
+    {
+      value: '12',
+      label: 'Treinamento'
+    },
+    {
+      value: '13',
+      label: 'Workshop'
     },
 
   ]
@@ -55,14 +87,24 @@ export default function FormSearch(){
 
 
   function SelectFilters(){
-    setSelectedCategory(categoria);
+    setSelectedCategory(selectedCategories);
     setSelectedCity(cidade)
     router.push('/busca')
   }
+    const [selectedCategories, setSelectedCategories] = useState<any>([]);
+
+    const handleCategoryChange = (categoryValue) => {
+      if (selectedCategories.includes(categoryValue)) {
+        setSelectedCategories(selectedCategories.filter((c) => c !== categoryValue));
+      } else {
+        setSelectedCategories([...selectedCategories, categoryValue]);
+      }
+    };
 
   useEffect(() => {
     BuffetService.showBuffets()
       .then((res) => {
+   
         let filteredBuffets = res.map((buffet) => buffet?.entidade?.enderecos[0]?.endereco?.cidade?.nome);
     
   
@@ -90,34 +132,12 @@ export default function FormSearch(){
       padding: '2rem',
       borderRadius: '20px',
     }}>
-      <select value={categoria} onChange={(e) => setCategoria(e.target.value)} style={{
-        width: '278px',
-        borderRadius: '50px',
-        padding: '.8rem',
-        border: 'none',
-        backgroundColor: theme.colors.neutral.x000, // Defina o fundo original para o select
-        appearance: 'none', // Remover a aparência padrão do sistema
-        backgroundImage: `URL(${arrowDown.src})`, // Substitua com o caminho da sua imagem da seta
-        backgroundPosition: 'right 10px center', // Ajuste a posição da imagem da seta
-        backgroundRepeat: 'no-repeat', // Não repita a imagem
-        color: theme.colors.primary.x600,
-        
-        fontWeight: 500
-      }}>
-        <option value=""  style={{
-          color: theme.colors.primary.x600,
-          fontWeight: 500,
-          textAlign: 'left',
-        }}>Todas as categorias</option>
-        {categories.map((item, index) => {
-          return (
-            <option key={index} value={item.label} style={{
-              color: theme.colors.primary.x600,
-              fontWeight: 500
-            }}> {item.label}</option>
-          );
-        })}
-      </select>
+      <CategoryFilter
+        categories1={categories1}
+        categories2={categories2}
+        selectedCategories={selectedCategories}
+        onCategoryChange={handleCategoryChange}
+      />
   
       <select value={cidade} onChange={(e) => setCidade(e.target.value)} style={{
         width: '278px',
@@ -135,7 +155,8 @@ export default function FormSearch(){
         <option value="" style={{
           color: theme.colors.primary.x600,
           fontWeight: '500',
-          textAlign: 'left'
+          textAlign: 'left',
+        
         }}>Todos os locais</option>
         {
           cities.map((item, index) => {
@@ -157,4 +178,4 @@ export default function FormSearch(){
     </FormBox>
   );
   
-}
+    }

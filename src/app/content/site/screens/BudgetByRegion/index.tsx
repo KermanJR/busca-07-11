@@ -10,7 +10,7 @@ import Input from "@src/app/theme/components/Input/Input";
 import { ModalContext } from "@src/app/context/ModalContext";
 import ModalRegister from "../HomeScreen/Components/Modals/RegisterModal";
 import ModalLogin from "../HomeScreen/Components/Modals/LoginModal";
-
+import { Button as BtnMaterial } from '@mui/material';
 import useSize from "@src/app/theme/helpers/useSize";
 import InputDash from "@src/app/components/system/InputDash";
 import Select from "@src/app/theme/components/Select/Select";
@@ -22,9 +22,11 @@ import {AiOutlineCloseCircle} from 'react-icons/ai'
 import Close from '../../../../../../public/assets/images/close.png'
 import Correct from '../../../../../../public/assets/images/correct.png'
 import Image from "@src/app/theme/components/Image/Image";
-import Button from '@mui/material/Button';
+import Button from "@src/app/theme/components/Button/Button";
 import CircularProgress from '@mui/material/CircularProgress';
 import ModalRecoveryPassword from "../HomeScreen/Components/Modals/RecoveryPassword";
+import WhatsAppButton from "../HomeScreen/Components/WhatsappButton";
+import CategoryFilter from "./CategoryFilter";
 export default function BudgetByRegion(){
 
   
@@ -183,10 +185,10 @@ export default function BudgetByRegion(){
 
        
 
-        <Button
+<Button
           onClick={(e)=>setShowConfirmationModal(!showConfirmationModal)}
           fullWidth={false}
-          style={{
+          styleSheet={{
             backgroundColor: theme.colors.secondary.x500,
             borderRadius: '100%',
             height: '30px',
@@ -198,8 +200,8 @@ export default function BudgetByRegion(){
             marginBottom: '1rem',
             position: 'relative',
             alignSelf: 'end',
-            marginTop: '-1rem',
-            marginRight: '-1rem',
+            marginTop: '1rem',
+            marginRight: '1rem',
             boxShadow: '0.5px 1px 3px 1px #969BA0'
           }}
         >
@@ -241,25 +243,29 @@ export default function BudgetByRegion(){
               
 
 <Button
-          type="submit"
-          variant="contained"
           onClick={(e)=>setShowNegationModal(!showNegationModal)}
-          disabled={isLoading}
-          style={{
-            width: '20px',
-            height: '20px',
-            border: 'none',
-            textAlign: 'left',
-            cursor: 'pointer',
-            background: theme.colors.secondary.x500,
-            marginLeft: '1rem',
+          fullWidth={false}
+          styleSheet={{
+            backgroundColor: theme.colors.secondary.x500,
+            borderRadius: '100%',
+            height: '30px',
+            width: '25px',
+            textAlign: 'center',
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            marginBottom: '1rem',
+            position: 'relative',
+            alignSelf: 'end',
             marginTop: '1rem',
-            borderRadius: '20px',
+            marginRight: '1rem',
+            boxShadow: '0.5px 1px 3px 1px #969BA0'
           }}
-        
         >
           X
-        </Button>
+      </Button>
+
+        
            
             <Text variant="heading5" color="red" styleSheet={{display:' flex', flexDirection: 'row', height: '60%',justifyContent: 'center', alignItems: 'center',  marginTop: '-2rem'}}>
               Não há buffets cadastrados nessa região.
@@ -396,7 +402,78 @@ export default function BudgetByRegion(){
         clearMessages();
       }
     }, [error]);
+
+    const categories1 = [
+      {
+        value: '8',
+        label: 'Aniversário'
+      },
+      {
+        value: '9',
+        label: 'Bar e Bat Mitzvah'
+      },
+      {
+        value: '3',
+        label: 'Casamento'
+      },
+      {
+        value: '5',
+        label: 'Debutante'
+      },
+      {
+        value: '2',
+        label: 'Domicílio'
+      },
+      {
+        value: '1',
+        label: 'Festa infantil'
+      },
+      {
+        value: '7',
+        label: 'Formatura'
+      },
+    ]
   
+    const categories2 = [
+      {
+        value: '10',
+        label: 'Almoço/Jantar empresarial'
+      },
+      {
+        value: '4',
+        label: 'Confraternização'
+      },
+      {
+        value: '11',
+        label: 'Palestra'
+      },
+      {
+        value: '12',
+        label: 'Treinamento'
+      },
+      {
+        value: '13',
+        label: 'Workshop'
+      },
+  
+    ]
+
+    
+  const {
+    setSelectedCategory,
+    selectedCategory,
+    setSelectedCity,
+    selectedCity
+  } = useContext(UserContext);
+  
+    const [selectedCategories, setSelectedCategories] = useState<any>([]);
+    const handleCategoryChange = (categoryValue) => {
+      if (selectedCategories.includes(categoryValue)) {
+        setSelectedCategories(selectedCategories.filter((c) => c !== categoryValue));
+      } else {
+        setSelectedCategories([...selectedCategories, categoryValue]);
+      }
+    };
  
 
   
@@ -497,18 +574,12 @@ export default function BudgetByRegion(){
                   gap: '1rem',
                   paddingTop: '1rem'
                 }}>
-                  <Select 
-                    options={optionsTipo}
-                    onChange={(e)=>setTipo(e)}
-                    styleSheet={{
-                      borderRadius: '5px',
-                      backgroundColor: theme.colors.neutral.x050,
-                      color: 'black',
-                      fontSize: '.875rem',
-                      padding: '.8rem',
-                      border: 'none'
-                    }}
-                  />
+                  <CategoryFilter 
+                    categories1={categories1}
+                    categories2={categories2} 
+                    onCategoryChange={handleCategoryChange} 
+                    selectedCategories={selectedCategories}/>
+                  
                   <Select
                     onChange={handleStateChange}
                     loading={loadingState}
@@ -554,20 +625,23 @@ export default function BudgetByRegion(){
                 </Box>
 
   
-              <Button
+              <BtnMaterial
           type="submit"
           variant="contained"
-          
+    
           disabled={isLoading}
           style={{
             backgroundColor: theme.colors.secondary.x500,
             borderRadius: '20px',
-            marginTop: '1rem'
+            marginTop: '1rem',
+            textAlign: 'center',
+            margin: '1rem auto',
+            width: '50%'
           }}
           startIcon={isLoading ? <CircularProgress size={20} color="inherit" /> : null}
         >
           {isLoading ? <Text color={theme.colors.neutral.x000}>Enviando...</Text> : <Text  color={theme.colors.neutral.x000}>Enviar para todos os buffets da região</Text>}
-        </Button>
+        </BtnMaterial>
               
               {error ? <Text styleSheet={{color:' red', textAlign: 'center', marginTop: '1rem', fontSize: '.875rem'}}>{error}</Text>: ''}
               </Box>
@@ -585,6 +659,7 @@ export default function BudgetByRegion(){
             </Box>
           <Box>
         </Box>
+
       </Box>
     )
 

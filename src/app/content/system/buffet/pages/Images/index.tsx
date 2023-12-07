@@ -26,6 +26,8 @@ const ImagesBuffet = () =>{
 
 
   const [hoveredEvent, setHoveredEvent] = useState(false);
+  
+  const [hoveredEvent2, setHoveredEvent2] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const [imagesBuffetDatabase, setImagesBuffetDatabase] = useState([]);
@@ -92,9 +94,10 @@ const ImagesBuffet = () =>{
 
   const {
     idBuffet,
-    dataBuffet
+    dataBuffet,
+    dataUser,
+    setDataBuffet
   } = useContext(UserContext)
-
 
   //Selecionar Imagens
   const handleImageSelectOne = (event) => {
@@ -182,6 +185,7 @@ async function PostFirstImageBuffetOne() {
         setMessageFirstImage('Imagem cadastrada com sucesso.')
         setMessageSecondImage('')
         setMessageThreeImage('')
+        EditBuffet()
       } catch (error) {
         setMessageFirstImage('Erro no cadastro da imagem.')
       }
@@ -412,13 +416,13 @@ function createGalleryBuffet(id_image){
 
    //RETORNA OS DADOS DO BUFFET PELO SEU ID
    function GetBuffetById(){
-    BuffetService.showBuffetByIdEntity(dataBuffet['entidade']?.id)
+    BuffetService.showBuffetByIdEntity(dataBuffet?.['id'],)
     .then((response) => {
         setSlug(response?.slug)
         setAreaTotal(response?.area_total);
         setAboutBuffet(response?.sobre);
         setCapacityTotalBuffet(response?.capacidade_total);
-        setSlug(response?.slug);
+       
         setHoursWeek(response?.horario_atendimento);
         setHoursWeekend(response?.horario_atendimento_fds);
         setYoutube(response?.youtube)
@@ -429,29 +433,30 @@ function createGalleryBuffet(id_image){
     });
   }
 
-  
+
 
 
 
   function EditBuffet(){
-    BuffetService.editBuffets(idBuffet, {
-      slug: slug,
-      capacidade_total: capacityTotalBuffet,
-      area_total: areaTotal,
-      sobre: aboutBuffet,
-      horario_atendimento: hoursWeek,
-      horario_atendimento_fds: hoursWeekend,
-      youtube: youtube,
-      status: 'A',
+    BuffetService.editBuffets(dataBuffet?.['id'], {
+      slug: dataBuffet?.['slug'],
+      capacidade_total: dataBuffet?.['capacidade_total'],
+      area_total: dataBuffet?.['area_total'],
+      sobre: dataBuffet?.['sobre'],
+      horario_atendimento: dataBuffet?.['horario_atendimento'],
+      horario_atendimento_fds: dataBuffet?.['horario_atendimento_fds'],
+      youtube: dataBuffet?.['youtube'],
+      status: "A",
       redes_sociais: [
         {
             "descricao": "https://www.youtube.com/",
-            "tipo": urlYoutube? urlYoutube: 'Nenhum'
+            "tipo": dataBuffet?.['youtube']? dataBuffet?.['youtube']: 'Nenhum'
         }
       ]
     })
     .then(async (response)=>{
       console.log(response)
+      setDataBuffet(dataBuffet)
     }).catch((error)=>{
       setMessage('Erro ao salvar dados, tente novamente');
       console.log(error)
@@ -478,10 +483,29 @@ function createGalleryBuffet(id_image){
 
   useEffect(()=>{
     GetBuffetById();
-  }, [])
+  }, [dataBuffet?.['id']])
 
+  
 
   const EventActionPopup = () => (
+    <Box styleSheet={{ 
+      display: 'flex',
+      flexDirection: 'row',
+      gap: '8px' ,
+      borderRadius: '4px',
+      padding: '8px',
+      backgroundColor: theme.colors.neutral.x000,
+      boxShadow: `0px 4px 4px 0px ${theme.colors.neutral.x050}`,
+      zIndex: 1,
+      }}>
+        <Text variant="small">
+         Capa do perfil: 1920 x 850
+        </Text>
+     
+    </Box>
+  );
+
+  const EventActionPopup2 = () => (
     <Box styleSheet={{ 
       display: 'flex',
       flexDirection: 'row',
@@ -495,7 +519,7 @@ function createGalleryBuffet(id_image){
       boxShadow: `0px 4px 4px 0px ${theme.colors.neutral.x050}`,
       }}>
         <Text variant="small">
-         Imagens no formato jpg. Capa do perfil, Capa do card, Imagens da galeria.
+         Capa do card: 1920 x 490
         </Text>
      
     </Box>
@@ -534,7 +558,7 @@ function createGalleryBuffet(id_image){
       ) : null}
      <Box styleSheet={{display: 'grid',gridTemplateColumns: '1fr 1fr', gap: '4rem'}}>
         <Box>
-          <Box styleSheet={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '5px'}}>
+          <Box styleSheet={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '5px', position: 'relative'}}>
             <Text variant="small" color={theme.colors.neutral.x500}>Recomendação</Text>
             <Icon 
               name="default_icon" 
@@ -563,7 +587,20 @@ function createGalleryBuffet(id_image){
               }}/>
           </label>
         </Box>
-        <Box styleSheet={{marginTop: '2.3rem'}}>
+        <Box>
+        <Box styleSheet={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '5px'}}>
+            <Text variant="small" color={theme.colors.neutral.x500}>Recomendação</Text>
+            <Icon 
+              name="default_icon" 
+              size="sm" 
+              fill={theme.colors.secondary.x600}  
+              onMouseEnter={(e)=>setHoveredEvent2(!hoveredEvent2)}
+              onMouseLeave={(e) => setHoveredEvent2(!hoveredEvent2)}
+            />
+              {hoveredEvent2  && (
+                <EventActionPopup2/>
+              )}
+          </Box>
           <label 
             htmlFor="capaCard" 
             style={{
@@ -571,6 +608,7 @@ function createGalleryBuffet(id_image){
               backgroundColor: theme.colors.neutral.x050,
               padding: '.875rem',
               borderRadius: '8px',
+              marginTop: '1rem'
             }}>
               <Text color={theme.colors.neutral.x800} styleSheet={{fontWeight: '400'}}>Selecione a imagem de capa do card</Text>
               <input id="capaCard" name="capaCard" placeholder="Nome do buffet" type="file" required={true} onChange={(e)=>handleImageSelectTwo(e)}  style={{

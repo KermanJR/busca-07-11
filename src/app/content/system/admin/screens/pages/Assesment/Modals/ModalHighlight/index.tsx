@@ -22,7 +22,7 @@ const ModalHighlight = ({isModalOpenHighLight, setIsModalOpenHighlight, index, n
     })
   }, [])
 
-  console.log(user)
+  
 
   function updateHighlight() {
     switch (user?.entidade?.destacado) {

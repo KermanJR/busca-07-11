@@ -3,7 +3,7 @@
 import { ModalContext } from "@src/app/context/ModalContext";
 import { useTheme } from "@src/app/theme/ThemeProvider";
 import Box from "@src/app/theme/components/Box/Box";
-
+import axios from "axios";
 import Image from "@src/app/theme/components/Image/Image";
 import Input from "@src/app/theme/components/Input/Input";
 import Link from "@src/app/theme/components/Link/Link";
@@ -27,12 +27,14 @@ import PagBankService from "@src/app/api/PagBankService";
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import ModalRecoveryPassword from "../HomeScreen/Components/Modals/RecoveryPassword";
+import WhatsAppButton from "../HomeScreen/Components/WhatsappButton";
 
 
 export default function NewBuffet() {
  
   const [response, setResponse] = useState<any>(null);
   const [errors, setErrors] = useState<[]>([]);
+  const [errorDocument, setErrorDocument] = useState('');
 
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState<string | null>(null);
@@ -90,8 +92,7 @@ export default function NewBuffet() {
         res?.messages?.errors ? setErrors( res?.messages?.errors): ''
         if(res.result.status){
           setResponse(res);
-          setDataUser(res)
-          createSignatureBuffet(res?.result?.entidade?.id)
+          setDataUser(res);
           setModalOpen(false)
           window.localStorage.setItem('ID_ENTITY', res?.result?.entidade?.id);
           window.localStorage.setItem('USER_NAME', res?.result?.entidade?.nome);
@@ -99,7 +100,7 @@ export default function NewBuffet() {
           window.localStorage.setItem('USER_ID', res?.result?.user?.id_entidade);
           window.localStorage.setItem('USER_ROLE', res?.result?.user?.id_perfil);
           setSuccess('Cadastro realizado com sucesso!')
-          router.push('/dashboard/buffet')
+          router.push('/planos')
 
         }else if(res?.messages?.errors){
           setErrors(res?.messages?.errors);
@@ -116,23 +117,7 @@ export default function NewBuffet() {
       setIsLoading(false)
   };
 
-  async function createSignatureBuffet(id_entidade){
-    const data = {
-      "tipo": `PLAN_3571D956-D88B-485C-89EC-18CA89CF0C1C`,
-      "status": 'ACTIVE',
-      "valor": valorPlanoBasico,
-      "desconto": 1.22,
-      "id_plano": 1,
-      "id_entidade": id_entidade
-  }
-    PagBankService.createSignatureInBuffet(data)
-      .then(res=>{
-        console.log(res)
-      }).catch(err=>{
-        console.log(err)
-      })
-  }
-
+ 
   useEffect(()=>{
     BuffetService.showPlans()
     .then(res=>{
@@ -144,13 +129,56 @@ export default function NewBuffet() {
     const clearMessages = () => {
       setTimeout(() => {
         setErrors(null);
+        setErrorDocument('')
       }, 3000);
     };
 
-    if (errors || success) {
+    if (errors || success || errorDocument) {
       clearMessages();
     }
-  }, [errors, success]);
+  }, [errors, success, errorDocument]);
+
+  const validarCPF = async (cpf) => {
+    const apiUrl = `https://api-publica.speedio.com.br/buscarcnpj?cnpj=${removeMask(cpf)}`;
+    try {
+      const response = await axios.get(apiUrl);
+      if (response.data.STATUS === 'ATIVA') {
+        setDocumento(cpf)
+      } else {
+        setErrorDocument('Documento inválido.');
+      }
+    } catch (error) {
+      console.error('Erro ao validar CPF:', error);
+      setErrorDocument('Erro o verificar validade o documento.');
+    }
+  };
+
+  const formatDocument = (value) => {
+    // Remove caracteres não numéricos
+    const cleanedValue = value.replace(/\D/g, '');
+  
+    // Limita a quantidade de caracteres a 14
+    if (cleanedValue.length <= 14) {
+      if (cleanedValue.length === 14) {
+        // É um CNPJ, aplica a máscara
+        const formattedValue = cleanedValue.replace(
+          /(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/,
+          '$1.$2.$3/$4-$5'
+        );
+        validarCPF(formattedValue)
+        // Atualiza o estado com o CNPJ formatado
+        setDocumento(formattedValue);
+      } else {
+        // Valor inválido ou não completo, não aplica a máscara
+        setDocumento(cleanedValue);
+      }
+    }
+  };
+
+  const removeMask = (formattedCNPJ) => {
+    // Remove todos os caracteres não numéricos
+    return formattedCNPJ.replace(/\D/g, '');
+  };
 
 
 
@@ -188,7 +216,7 @@ export default function NewBuffet() {
         <ul>
           <li style={{display: 'flex', width: 'auto', alignItems: 'center'}}>
             <BsCheck style={{display: 'inline-block', width: !(size < 350) ? '50px' : '30px', fill: theme.colors.secondary.x500}}/>
-            <p style={{width: 'auto', fontWeight: !(size < 1230) ? 'bold' : '500', color: '#fff', fontSize: (size < 350) && '0.6rem'}}>Seu negócio exposto para o público alvo do seu negócio.</p>
+            <p style={{width: 'auto', fontWeight: !(size < 1230) ? 'bold' : '500', color: '#fff', fontSize: (size < 350) && '0.6rem'}}>Sua empresa em evidência.</p>
           </li>
           <li style={{display: 'flex', alignItems: 'center'}}>
             <BsCheck style={{display: 'inline-block', width: !(size < 350) ? '50px' : '30px', fill: theme.colors.secondary.x500}}/>
@@ -204,7 +232,7 @@ export default function NewBuffet() {
           </li>
           <li style={{display: 'flex', alignItems: 'center'}}>
             <BsCheck style={{display: 'inline-block', width: !(size < 350) ? '50px' : '30px', fill: theme.colors.secondary.x500}}/>
-            <p style={{width: 'auto', fontWeight: !(size < 1230) ? 'bold' : '500', color: '#fff', fontSize: (size < 350) && '0.6rem'}}>Sem fidelidade, cancele quando quiser.</p>
+            <p style={{width: 'auto', fontWeight: !(size < 1230) ? 'bold' : '500', color: '#fff', fontSize: (size < 350) && '0.6rem'}}>Cancele quando quiser, sem multa.</p>
           </li>
         </ul>
       </Box>
@@ -302,7 +330,8 @@ export default function NewBuffet() {
               type="text" 
               required={true}
               placeholder="CNPJ"
-              onChange={(e)=>setDocumento(e)}
+              onChange={(e)=>formatDocument(e)}
+              value={documento}
               styleSheet={{
                 width: '101%',
                 borderRadius: '1px',
@@ -362,12 +391,15 @@ export default function NewBuffet() {
          
         })}
 
+        {errorDocument &&   <Text color="red" styleSheet={{fontWeight: '400', fontSize: '.875rem'}}>{errorDocument}</Text>}
+
         {success && (
              <Text color="green">{success}</Text>
          )}
         </Box>
         
       </Box>
+     
     </Box>
   )
 }

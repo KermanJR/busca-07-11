@@ -1,7 +1,7 @@
 .selects {
   margin-top: 10px;
   padding: 10px;
-  border: 1px solid #EA760A;
+  border: 1px solid #041F60;;
   border-radius: 5px;
   width: 170px;
   font-size: .7rem;
@@ -20,13 +20,13 @@
     height: 15px;
     margin-right: 10px;
     background: transparent;
-    box-shadow: 0 0 0 1px #FF5722;
-    border-radius: 50%;
+    box-shadow: 0 0 0 1px #041F60;
+    border-radius: 1px;
 }
 
 
 .inputRadio:checked {
-  background-color: #FF5722;
+  background-color: #041F60;;
 }
 
 .inputRadioNotChecked{
@@ -36,7 +36,7 @@
   height: 15px;
   margin-right: 10px;
   background: transparent;
-  box-shadow: 0 0 0 1px #FF5722;
-  border-radius: 50%;
+  box-shadow: 0 0 0 1px #041F60;;
+  border-radius: 1px;
 }
 

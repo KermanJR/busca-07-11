@@ -55,11 +55,12 @@ export default function Plans(){
 
     
   //Functions
-    const navigateCheckout = (data)=>{
+    const navigateCheckout = (data, id_plano)=>{
       setSelectedPlan(data)
       window.localStorage.setItem('VALUE_PLAN', formatarMoeda(data?.valor_mensal));
       window.localStorage.setItem('NAME_PLAN', data?.nome)
-      window.localStorage.setItem('ID_PLAN', data?.id)
+      window.localStorage.setItem('ID_PLAN', id_plano)
+
       router.push('/checkout')
     }
     
@@ -129,8 +130,8 @@ export default function Plans(){
         </Box> 
 
         <Box styleSheet={{margin: '0 auto', textAlign: 'center', padding: !isMobile ? '4rem 6.5rem' : (!(size < 380) ? '3rem 5rem' : '3rem')}}>
-          <Text variant="heading1semiBold">Escolha seu plano</Text>
-          <Text variant="body2">Anuncie seu buffet e receba orçamentos</Text>
+          <Text variant="heading1semiBold" styleSheet={{width: '90%', margin: '0 auto'}}>Escolha seu plano e comece a degustar o período de teste grátis</Text>
+          <Text variant="body2" styleSheet={{paddingTop: '.7rem'}}>Anuncie seu buffet e receba orçamentos</Text>
         </Box>  
           
         <Box styleSheet={{display: 'grid', gridTemplateColumns: !(size < 1100) ? 'repeat(3, 1fr)' : '1fr', gap: '2rem', paddingBottom: '5rem'}}>
@@ -151,7 +152,7 @@ export default function Plans(){
                   </Box>
                 ))}
               </Box>
-              <Button styleSheet={{alignSelf: 'center', marginTop: 'auto', width: '100%', padding: '1rem'}} size="lg" fullWidth onClick={(e)=>navigateCheckout(dataPlans[0])}>CONTINUAR</Button>
+              <Button styleSheet={{alignSelf: 'center', marginTop: 'auto', width: '100%', padding: '1rem'}} size="lg" fullWidth onClick={(e)=>navigateCheckout(dataPlans[0], 1)}>CONTINUAR</Button>
           </Box>
           <Box styleSheet={{boxShadow: `0px 4px 4px 0px ${theme.colors.neutral.x050}`, width: !(size < 1100) ? '30vw' : (!(size < 380) ? '23.5625rem' : '100vw'), maxWidth: '23.5625rem', height: '33.6875rem', borderRadius: '1.25rem', padding: '2rem', border: `1px solid ${theme.colors.primary.x1000}`}}>
                 <Text color={theme.colors.neutral.x999}>Standard</Text>
@@ -170,7 +171,7 @@ export default function Plans(){
                  ))}
                
               </Box>
-              <Button styleSheet={{alignSelf: 'center', marginTop: 'auto', width: '100%', padding: '1rem'}} size="lg" colorVariant="secondary" onClick={(e)=>navigateCheckout(dataPlans[1])}>CONTINUAR</Button>
+              <Button styleSheet={{alignSelf: 'center', marginTop: 'auto', width: '100%', padding: '1rem'}} size="lg" colorVariant="secondary" onClick={(e)=>navigateCheckout(dataPlans[1], 2)}>CONTINUAR</Button>
             </Box>
             <Box styleSheet={{boxShadow: `0px 4px 4px 0px ${theme.colors.neutral.x050}`, width: !(size < 1100) ? '30vw' : (!(size < 380) ? '23.5625rem' : '100vw'), maxWidth: '23.5625rem', height: '33.6875rem', borderRadius: '1.25rem', padding: '2rem'}}>
                 <Text color={theme.colors.neutral.x999}>Premium</Text>
@@ -191,11 +192,12 @@ export default function Plans(){
                  ))}
                 
                 </Box>
-                <Button styleSheet={{alignSelf: 'center', marginTop: 'auto', width: '100%', padding: '1rem'}} size="lg"onClick={(e)=>navigateCheckout(dataPlans[2])}>CONTINUAR</Button>
+                <Button styleSheet={{alignSelf: 'center', marginTop: 'auto', width: '100%', padding: '1rem'}} size="lg" onClick={(e)=>navigateCheckout(dataPlans[2], 3)}>CONTINUAR</Button>
             </Box>
+           
             
         </Box>
-          
+        <Text styleSheet={{marginTop: '-2rem'}}>Cancele quando quiser e sem multa.</Text>
         </Box>
     )
 

@@ -10,8 +10,8 @@ import { useRouter } from "next/dist/client/router";
 import Slider from 'react-slick';
 import {Carousel} from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import ImageAniver from '../../../../../../../../public/assets/images/aniversario-removebg-preview.png'
-import ImageCasamento from '../../../../../../../../public/assets/images/casamento-removebg-preview.png'
+import ImageAniver from '../../../../../../../../public/assets/images/casamento.jpeg'
+import ImageCasamento from '../../../../../../../../public/assets/images/infantil.jpeg'
 
 interface BuffetProps{
   categoria: string;
@@ -56,7 +56,7 @@ const CarouselTest: React.FC<CarouselProps> = ({ items, styleSheet, className, .
 
   function SelectCategory(category){
     if(category == 'Outros'){
-      setSelectedCategory('')
+      setSelectedCategory([])
     }else{
       setSelectedCategory(category);
     }
@@ -64,10 +64,10 @@ const CarouselTest: React.FC<CarouselProps> = ({ items, styleSheet, className, .
     router.push('/busca')
   }
   
-    ['Infantil', 'Domicílio', 'Casamento', 'Confraternização', 'Aniversário'];
+    
   let typesOfParty=[
     {
-      label: 'Infantil',
+      label: 'Festa Infantil',
       image: 'https://guiadobebe.com.br/wp-content/uploads/mediagbb/01/muitas-novidades-em-festas-infantis-com-pequenas-decoracoes-interatividade-mesas-descontruidas-e-ilhas-gastronomicas-0000000000018270.jpg'
     },
     {
@@ -95,18 +95,18 @@ const CarouselTest: React.FC<CarouselProps> = ({ items, styleSheet, className, .
       alignItems: 'center', padding: (size <= 650) ? '0' : '2rem 8rem',
       gap: (size <= 650) ? '2rem' : '0',
     }}>
-      <Box styleSheet={{display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', gap: (size <= 650) ? '2rem' : '1rem'}} onClick={(e)=>SelectCategory('Infantil')}>
+      <Box styleSheet={{display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', gap: (size <= 650) ? '2rem' : '1rem'}} onClick={(e)=>SelectCategory(['Infantil'])}>
         <Box styleSheet={{
-          background: 'URL(https://guiadobebe.com.br/wp-content/uploads/mediagbb/01/muitas-novidades-em-festas-infantis-com-pequenas-decoracoes-interatividade-mesas-descontruidas-e-ilhas-gastronomicas-0000000000018270.jpg)',
+          background: `URL(${ImageCasamento.src})`,
           borderRadius: '100%', height: '150px', width: '150px',
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat'
         }}>
 
         </Box>
-        <Box styleSheet={{marginTop: (size <= 650) ? '-1rem' : '0' }}><Text>Infantil</Text></Box>
+        <Box styleSheet={{marginTop: (size <= 650) ? '-1rem' : '0' }}><Text>Festa Infantil</Text></Box>
       </Box>
-      <Box styleSheet={{display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', gap: (size <= 650) ? '2rem' : '1rem'}} onClick={(e)=>SelectCategory('Domicílio')}>
+      <Box styleSheet={{display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', gap: (size <= 650) ? '2rem' : '1rem'}} onClick={(e)=>SelectCategory(['Domicílio'])}>
         <Box styleSheet={{
           background: 'URL(https://images.pexels.com/photos/7245466/pexels-photo-7245466.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)',
           borderRadius: '100%', height: '150px', width: '150px',
@@ -117,9 +117,9 @@ const CarouselTest: React.FC<CarouselProps> = ({ items, styleSheet, className, .
         </Box>
         <Box styleSheet={{marginTop: (size <= 650) ? '-1rem' : '0' }}><Text>Domicílio</Text></Box>
       </Box>
-      <Box styleSheet={{display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', gap: (size <= 650) ? '2rem' : '1rem'}} onClick={(e)=>SelectCategory('Casamento')}>
+      <Box styleSheet={{display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', gap: (size <= 650) ? '2rem' : '1rem'}} onClick={(e)=>SelectCategory(['Casamento'])}>
         <Box styleSheet={{
-          background: 'URL(https://images.pexels.com/photos/1114425/pexels-photo-1114425.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)',
+          background:  `URL(${ImageAniver.src})`,
           borderRadius: '100%', height: '150px', width: '150px',
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat'
@@ -128,7 +128,7 @@ const CarouselTest: React.FC<CarouselProps> = ({ items, styleSheet, className, .
         </Box>
         <Box styleSheet={{marginTop: (size <= 650) ? '-1rem' : '0' }}><Text>Casamento</Text></Box>
       </Box>
-      <Box styleSheet={{display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', gap: (size <= 650) ? '2rem' : '1rem'}} onClick={(e)=>SelectCategory('Confraternização')}>
+      <Box styleSheet={{display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', gap: (size <= 650) ? '2rem' : '1rem'}} onClick={(e)=>SelectCategory(['Confraternização'])}>
         <Box styleSheet={{
           background: 'URL(https://images.pexels.com/photos/4005229/pexels-photo-4005229.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)',
           borderRadius: '100%', height: '150px', width: '150px',
@@ -139,7 +139,7 @@ const CarouselTest: React.FC<CarouselProps> = ({ items, styleSheet, className, .
         </Box>
         <Box styleSheet={{marginTop: (size <= 650) ? '-1rem' : '0' }}><Text>Confraternização</Text></Box>
       </Box>
-      <Box styleSheet={{display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', gap: (size <= 650) ? '2rem' : '1rem'}} onClick={(e)=>SelectCategory('Aniversário')}>
+      <Box styleSheet={{display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', gap: (size <= 650) ? '2rem' : '1rem'}} onClick={(e)=>SelectCategory(['Aniversário'])}>
         <Box styleSheet={{
           background: 'URL(https://images.pexels.com/photos/2291347/pexels-photo-2291347.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)',
           borderRadius: '100%', height: '150px', width: '150px',

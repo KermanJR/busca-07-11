@@ -30,14 +30,19 @@ export default function Header(){
 
   const {
     setDataUser,
-    dataUser
+    dataUser,
+    dataBuffet
   } = useContext(UserContext)
+
+
 
   const [isSideMenuOpen, setSideMenuOpen] = useState(false);
 
   const toggleSideMenu = () => {
     setSideMenuOpen(!isSideMenuOpen);
   };
+
+  
 
 
   let idRole;
@@ -121,7 +126,7 @@ export default function Header(){
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: !(size <= 1200) ? 'center' : 'center',
-          gap: !(size <= 1200) ? '6.5vw' : '3vw'
+          gap: !(size <= 1200) ? '3.5vw' : '1vw'
         }}
       >
         <Box><Link href="/" variant="heading6semiBold" styleSheet={{fontSize: !(size <= 1200) ? '1rem' : '0.8rem'}}>Home</Link></Box>
@@ -140,11 +145,17 @@ export default function Header(){
           marginRight: (size < 1200) ? '' : '0rem'
         }}
       >
-        {!dataUser?.['entidade']?.nome ?
+        {dataUser?.['entidade']?.nome == null || dataBuffet?.length == 0 &&
+           <button onClick={() => router.push('/login')} style={{color: 'black', paddingRight: '1rem', textDecoration: 'underline'}}><Text>Acesse o buffet</Text></button>
+        }
+        {dataUser?.['entidade']?.nome == null || dataBuffet?.length == 0?
+  
         <Button variant="contained" colorVariant="secondary" size="lg" onClick={() => router.push('/login')}>Anuncie seu Buffet</Button> : ''
         }
+
+
         
-        {dataUser?.['entidade']?.nome ? 
+        {dataUser?.['entidade']?.nome && dataBuffet?.length > 0? 
         <Box>
 
           <Box styleSheet={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', cursor: 'pointer'}}  
@@ -168,7 +179,7 @@ export default function Header(){
           
           </Box>
             :  
-          <Button colorVariant="secondary" variant="outlined" size="lg" onClick={openBudgetModal}>Entrar/Cadastrar</Button>
+          <Button colorVariant="secondary" variant="outlined" size="lg" onClick={openBudgetModal}>Login</Button>
          
         }
         

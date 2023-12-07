@@ -53,6 +53,7 @@ const Settings = () =>{
     idBuffet
   } = useContext(UserContext);
 
+
   
 
  
@@ -165,7 +166,7 @@ const Settings = () =>{
 
 
  
-
+console.log(dadosAssinatura)
   function editarDadosAssinante(e){
     e.preventDefault();
     const data = {
@@ -246,7 +247,7 @@ const Settings = () =>{
           placeholder="Digite o e-mail" 
           type="text" 
           disabled={true} 
-          value={dadosAssinatura?.['status']} 
+          value={dadosAssinatura?.['status'] === 'ACTIVE' && 'Ativa' || dadosAssinatura?.['status'] === 'OVERDUE' && 'Em análise'} 
           styleSheet={{backgroundColor: theme.colors.neutral.x200}}
         />
       </Box>

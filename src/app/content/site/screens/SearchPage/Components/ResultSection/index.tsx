@@ -9,7 +9,7 @@ import { useTheme } from "@src/app/theme/ThemeProvider";
 import { BiMap } from "react-icons/bi";
 import Icon from "@src/app/theme/components/Icon/Icon";
 import useResponsive from "@src/app/theme/helpers/useResponsive";
-import { useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import { UserContext } from "@src/app/context/UserContext";
 import {useRouter } from 'next/router';
 import Pagination from "@src/app/components/system/Pagination";
@@ -79,7 +79,7 @@ const handlePageChange = (pageNumber) => {
                 }}
                 alt="image-card-home"
                 src={`https://buscabuffet.com.br/api/uploads/${
-                  (result?.galerias?.find(image => image.arquivo.tipo === 'card') || {}).arquivo.nome
+                  (result?.galerias?.find(image => image?.arquivo?.tipo === 'card') || {})?.arquivo?.nome
                 }`}
               />
 
@@ -113,7 +113,7 @@ const handlePageChange = (pageNumber) => {
                   colorVariant="complementar"
               >
                 <Text variant="small" styleSheet={{fontWeight: 'bold'}}>
-                  {result?.['entidade']?.['assinaturas'][0]?.['plano']?.['nome']} | Destacado</Text>
+                  {result?.['entidade']?.['assinaturas'][0]?.['plano']?.['nome']} | Destaque</Text>
               </Button>)
               }
 
@@ -130,7 +130,7 @@ const handlePageChange = (pageNumber) => {
                   colorVariant="complementar"
               >
                 <Text variant="small" styleSheet={{fontWeight: 'bold'}}>
-                   Destacado</Text>
+                    Destaque</Text>
               </Button>)
               }
 
@@ -190,10 +190,7 @@ const handlePageChange = (pageNumber) => {
                     }
                   </Text>
                 </Box>
-                <Box styleSheet={{display:' flex', flexDirection: 'row', alignItems: 'center', gap: '.4rem'}}>
-                  <Icon name="watch" fill={theme.colors.secondary.x500}/>
-                  <Text variant="body1" styleSheet={{color: theme.colors.neutral.x999}}>{result?.['horario_atendimento']}</Text>
-                </Box>
+                
               </Box>
 
             <Box styleSheet={{
@@ -230,9 +227,18 @@ const handlePageChange = (pageNumber) => {
                 tag="div"
             >
                 <Icon name="arrowChevronRight" fill={theme.colors.secondary.x500}/>
-                <Text variant="body1" styleSheet={{ color: theme.colors.neutral.x999, textAlign: 'left' }}>
-                {result?.['categorias']?.['length'] > 0 ? result?.['categorias'][result['categorias']['length'] - 1]['categoria']['nome'] : 'Nenhuma categoria'}
-                </Text>
+                <Text variant="body1" styleSheet={{ color: theme.colors.neutral.x999, textAlign: 'left', width: '90%'}}>
+  {result?.['categorias']?.length > 0 ? (
+    result?.['categorias']?.map((item, index) => {
+      return (
+        <React.Fragment key={index}>
+          {item?.categoria?.nome}
+          {index < result?.['categorias']?.length - 1 ? ', ' : ''}
+        </React.Fragment>
+      );
+    })
+  ) : 'Nenhuma Categoria'}
+</Text>
 
               </Box>
 

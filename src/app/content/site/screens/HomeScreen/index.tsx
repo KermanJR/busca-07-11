@@ -21,6 +21,7 @@ import useSize from "@src/app/theme/helpers/useSize";
 import ModalBudget from "./Components/Modals/BudgetModal";
 import { useRouter } from "next/router";
 import ModalRecoveryPassword from "./Components/Modals/RecoveryPassword";
+import WhatsAppButton from "./Components/WhatsappButton";
 
 export default function HomeScreen(){
 
@@ -197,7 +198,8 @@ export default function HomeScreen(){
             padding: '1rem',
           }}>
             <BiMap  style={{color: theme.colors.secondary.x500, fontSize: '30px'}}/>
-            <Text>Encontre o local ideal para o seu evento em poucos cliques</Text>
+            <Text styleSheet={{fontSize: '1rem', fontWeight: 'bold'}}>Encontre o espaço ideal</Text>
+            <Text styleSheet={{fontSize: '.875rem', fontWeight: '500'}}>Encontre o local ideal para o seu evento em poucos cliques</Text>
           </Box>
 
           <Box styleSheet={{
@@ -216,7 +218,8 @@ export default function HomeScreen(){
             flexShrink: '0'
           }}>
             <MdLocalAtm style={{color: theme.colors.secondary.x500, fontSize: '30px'}}></MdLocalAtm>
-            <Text>Encontre o local ideal para o seu evento em poucos cliques</Text>
+            <Text styleSheet={{fontSize: '1rem', fontWeight: 'bold'}}>Solicite o orçamento</Text>
+            <Text styleSheet={{fontSize: '.875rem', fontWeight: '500'}}>Encontre o local ideal para o seu evento em poucos cliques</Text>
           </Box>
 
           <Box styleSheet={{
@@ -235,7 +238,8 @@ export default function HomeScreen(){
             flexShrink: '0'
           }}>
             <BsCheckCircle style={{color: theme.colors.secondary.x500, fontSize: '30px'}}></BsCheckCircle>
-            <Text>Encontre o local ideal para o seu evento em poucos cliques</Text>
+            <Text styleSheet={{fontSize: '1rem', fontWeight: 'bold'}}>Escolha a melhor proposta </Text>
+            <Text styleSheet={{fontSize: '.875rem', fontWeight: '500'}}>Encontre o local ideal para o seu evento em poucos cliques</Text>
           </Box>
         </Box>
       </Box>
@@ -292,6 +296,7 @@ export default function HomeScreen(){
               <Image src={ImageCardHomeUlt.src} alt="" />
           </Box>
       </Box>
+     
     </Box>
   )
 }

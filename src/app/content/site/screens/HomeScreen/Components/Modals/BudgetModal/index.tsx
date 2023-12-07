@@ -94,7 +94,6 @@ export default function ModalBudget({ isOpen, onClose }) {
         nome: nome,
         email: email,
         password: password,
-        documento: documento,
         id_perfil: 3
     };
 
@@ -192,6 +191,7 @@ export default function ModalBudget({ isOpen, onClose }) {
           X
       </Button>
       
+      
         <Box tag="form" styleSheet={{display: 'flex', flexDirection: 'column', gap: '1rem'}} onSubmit={handleSubmit}>
           <Box styleSheet={{textAlign: 'center', display: 'flex', flexDirection: 'column', alignSelf: 'center', padding: '0', width: '100%'}}>
             <Text  variant="heading4" styleSheet={{fontWeight: 'bold'}}>Quer solicitar orçamentos?</Text>
@@ -236,25 +236,7 @@ export default function ModalBudget({ isOpen, onClose }) {
               }}
             />
           </Box>
-          <Box styleSheet={{display: 'flex', flexDirection: 'row',  alignContent: 'center', justifyContent: 'center', padding: '0 2rem'}}>
-            <Box styleSheet={{borderRadius: '1px', backgroundColor: theme.colors.neutral.x000, padding: '.585rem'}}>
-            <Image src={IconDocument.src} alt="" styleSheet={{width: '27px'}}/>
-            </Box>
-            <Input 
-              type="text" 
-              required={true}
-              value={documento}
-              onChange={(e)=>formatDocument(e)}
-              placeholder="Insira seu CPF"
-              styleSheet={{
-                width: '100%',
-                borderRadius: '1px',
-                backgroundColor: theme.colors.neutral.x000,
-                padding: '.8rem',
-                border: 'none',
-              }}
-            />
-          </Box>
+     
           <Box styleSheet={{display: 'flex', flexDirection: 'row',  alignContent: 'center', justifyContent: 'center', padding: '0 2rem'}}>
             <Box styleSheet={{borderRadius: '1px', backgroundColor: theme.colors.neutral.x000, padding: '.6rem'}}>
               <Image src={IconPassword.src} alt="" styleSheet={{width: '29px'}}/>

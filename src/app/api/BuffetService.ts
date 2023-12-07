@@ -36,7 +36,6 @@ export default class BuffetService {
 
     static async createUser(data: {
       nome: string,
-      documento: string,
       email: string,
       password: string,
   }): Promise<any> {
@@ -375,6 +374,23 @@ export default class BuffetService {
       }
     }
 
+    static async getCategoriesBuffetsById(id: number): Promise<any> {
+      const url = `${API_URL_BUSCABUFFET}/categorias/entidade/${id}`;
+      const bearerToken = localStorage.getItem('USER_TOKEN');
+      try {
+        const response = await axios.get(url,{
+          headers: {
+            Authorization: `Bearer ${bearerToken}`,
+          },
+        });
+    
+        return response.data;
+      } catch (error) {
+        console.error('Erro ao buscar categorias do buffet:', error);
+        throw error;
+      }
+    }
+
     static async postAttractionsServicesBuffets(data): Promise<any> {
       const url = `${API_URL_BUSCABUFFET}/buffets/detalhes`;
       const bearerToken = localStorage.getItem('USER_TOKEN');
@@ -408,6 +424,24 @@ export default class BuffetService {
         throw error;
       }
     }
+
+    static async deleteCategoriesBuffets(id_buffet): Promise<any> {
+      const url = `${API_URL_BUSCABUFFET}/categorias/entidade/${id_buffet}`;
+      const bearerToken = localStorage.getItem('USER_TOKEN');
+      try {
+        const response = await axios.delete(url, {
+          headers: {
+            Authorization: `Bearer ${bearerToken}`,
+          },
+        });
+    
+        return response.data;
+      } catch (error) {
+        console.error('Erro ao editar atrações e serviçoes do buffet:', error);
+        throw error;
+      }
+    }
+
 
 
     static async deleteFiles(id_file): Promise<any> {
@@ -808,7 +842,7 @@ export default class BuffetService {
     const url = `${API_URL_BUSCABUFFET}/arquivos`;
     const bearerToken = localStorage.getItem('USER_TOKEN');
 
-    console.log(data)
+   
     const formData = new FormData();
     formData.append('nome', data?.selectedImageOne?.name);
     formData.append('tipo', data?.tipo);
@@ -856,7 +890,7 @@ export default class BuffetService {
     const url = `${API_URL_BUSCABUFFET}/arquivos`;
     const bearerToken = localStorage.getItem('USER_TOKEN');
 
-    console.log(data)
+    
     const formData = new FormData();
     formData.append('nome', data?.selectedImageTwo?.name);
     formData.append('tipo', data?.tipo);
@@ -881,7 +915,7 @@ export default class BuffetService {
     const url = `${API_URL_BUSCABUFFET}/arquivos`;
     const bearerToken = localStorage.getItem('USER_TOKEN');
 
-    console.log(data)
+
     const formData = new FormData();
     formData.append('nome', data?.imageFile?.name);
     formData.append('tipo', data?.tipo);
