@@ -13,6 +13,7 @@ import Icon from "@src/app/theme/components/Icon/Icon";
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import SelectWithClickToAddCategory from "@src/app/components/system/SelectCategories";
+import SelectHours from "@src/app/components/system/SelectHours";
 
 const EditPerfil = () =>{
 
@@ -102,6 +103,42 @@ const EditPerfil = () =>{
     idBuffet,
     dataBuffet, setDataBuffet
   } = useContext(UserContext);
+
+  const optionsHours = [
+    {
+      value: 1,
+      label: "08:00 - 18:00"
+    },
+    {
+      value: 2,
+      label: "08:00 - 18:30"
+    },
+    {
+      value: 3,
+      label: "08:00 - 19:00"
+    },
+    {
+      value: 4,
+      label: "08:30 - 18:00"
+    },
+    {
+      value: 5,
+      label: "08:30 - 18:30"
+    },
+    {
+      value: 6,
+      label: "08:30 - 19:00"
+    },
+    {
+      value: 7,
+      label: "08:45 - 18:00"
+    },
+    {
+      value: 8,
+      label: "08:45 - 18:30"
+    },
+    
+  ]
 
   
 
@@ -308,15 +345,15 @@ const EditPerfil = () =>{
       status: 'I',
       redes_sociais: [
         {
-            "descricao": urlInstagram,
+            "descricao": urlInstagram ? urlInstagram : '',
             "tipo": "instagram"
         },
         {
-          "descricao": urlFacebook,
+          "descricao": urlFacebook ? urlFacebook : '',
           "tipo": "facebook"
       },
       {
-        "descricao": urlSite,
+        "descricao": urlSite ? urlSite : '',
         "tipo": "site"
       }
       ]
@@ -356,15 +393,15 @@ const EditPerfil = () =>{
       status: 'A',
       redes_sociais: [
         {
-            "descricao": urlInstagram,
+            "descricao": urlInstagram ? urlInstagram : '',
             "tipo": "instagram"
         },
         {
-          "descricao": urlFacebook,
+          "descricao": urlFacebook ? urlFacebook : '',
           "tipo": "facebook"
       },
       {
-        "descricao": urlSite,
+        "descricao": urlSite ? urlSite : '',
         "tipo": "site"
       }
       ]
@@ -747,6 +784,7 @@ const EditPerfil = () =>{
 
         <Box>
           <Text>Horário Atendimento (Fim de semana)</Text>
+        
           <InputDash placeholder="Atendimento: Fim de semana" type="text" value={hoursWeekend} onChange={setHoursWeekend} required={true}/>
         </Box>
         <Box>
@@ -765,22 +803,22 @@ const EditPerfil = () =>{
 
         <Box>
           <Text>Instagram</Text>
-          <InputDash placeholder="instagram.com/seuperfil" type="text" value={urlInstagram}  onChange={(e) => setUrlInstagram(e)} required={true}/>
+          <InputDash placeholder="instagram.com/seuperfil" type="text" value={urlInstagram}  onChange={(e) => setUrlInstagram(e)} />
         </Box>
 
         <Box>
           <Text>Facebook</Text>
-          <InputDash placeholder="facebook.com/seuperfil" type="text" value={urlFacebook}  onChange={(e) => setUrlFacebook(e)} required={true}/>
+          <InputDash placeholder="facebook.com/seuperfil" type="text" value={urlFacebook}  onChange={(e) => setUrlFacebook(e)} />
         </Box>
         <Box>
           <Text>URL Site</Text>
-          <InputDash placeholder="www.seusite.com.br" type="text" value={urlSite}  onChange={(e) => setUrlSite(e)} required={true}/>
+          <InputDash placeholder="www.seusite.com.br" type="text" value={urlSite}  onChange={(e) => setUrlSite(e)} />
         </Box>
      </Box>
 
      <Box styleSheet={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '2rem', padding: '1rem 0 1rem 0'}}>
      <Box>
-        <Text variant="heading4Bold" color={theme.colors.neutral.x999} styleSheet={{padding: '1rem 0'}}>Atrações</Text>
+        <Text variant="heading4Bold" color={theme.colors.neutral.x999} styleSheet={{padding: '1rem 0'}}>Principais comodidades</Text>
         <SelectWithClickToAddAttractives 
           options={attractionsBuffets} 
           selectedAttractivesBuffet={selectedAttractivesBuffet}

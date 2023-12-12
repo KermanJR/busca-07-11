@@ -485,7 +485,6 @@ export default function Checkout(){
     useEffect(()=>{
       BuffetService.showPlans()
       .then(res=>{
-        console.log(res)
         let id_plan =  window?.localStorage?.getItem('VALUE_PLAN')
         var valorNumericoString = id_plan.replace(/[^\d,]/g, '');
         var valorNumerico = parseFloat(valorNumericoString.replace(',', '.'));

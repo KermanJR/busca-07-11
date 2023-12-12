@@ -356,7 +356,8 @@ const Homedash = () =>{
 
           <TableBody>
             
-            {currentPropostas.map((item, index)=>(
+            {currentPropostas?.slice((currentPage - 1) * elementsPerPage, currentPage * elementsPerPage)
+          ?.map((item, index)=>(
               <Link href={`buffet/`} key={index} onClick={(e)=>handleBuffetClick(item?.id)}>
               <TableRow key={index} styleSheet={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', gap: '0rem'}}>
                 <TableCell >{item?.['id']}</TableCell>

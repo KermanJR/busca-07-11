@@ -46,7 +46,7 @@ export default function Footer(){
           width: '100%',
           backgroundColor: theme.colors.neutral.x050,
           color: theme.colors.neutral.x000,
-          padding: !(size < 1000) ? `3.5rem` : '1rem 0.5rem',
+          padding: !(size < 1000) ? `8rem 5rem 2rem 5rem` : '1rem 0.5rem',
           textAlign: !isMobile ? 'left' : 'center',
           justifyContent: 'space-between',
           marginTop: '4rem'

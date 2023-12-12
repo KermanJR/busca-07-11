@@ -354,6 +354,11 @@ useEffect(() => {
     })
   }, [filterState])
 
+  function clearFilters(){
+    setFilterState(null) 
+    setFilter('')
+  }
+
 
  
 
@@ -478,14 +483,28 @@ useEffect(() => {
           {renderCheckBoxes(typesOfParty2, 'filterParty')}
       
       </Box>
-      <Button onClick={(e)=>setFilter('')}  styleSheet={{width: '100%', alignSelf: 'center', borderRadius: '6px', marginTop: '.5rem'}} variant='outlined' textVariant='body1'>Limpar</Button>
+     
 
-      <Box styleSheet={{backgroundColor: theme.colors.neutral.x050, padding: !(size < 350) ? '1rem' : '5px', borderRadius: '6px', marginTop: '3rem', gridArea: !(size <= 650) ? '' : 'filter2'}}>
+      <Box styleSheet={{backgroundColor: theme.colors.neutral.x050, padding: !(size < 350) ? '1rem' : '5px', borderRadius: '6px', marginTop: '1rem', gridArea: !(size <= 650) ? '' : 'filter2'}}>
           <Text variant='heading5semiBold' styleSheet={!(size <= 650) ? {} : {fontSize: (!(size < 350) ? '0.9rem' : '0.7rem')}}>Por Estado</Text>
           {renderCheckBoxes(states, 'filterState')}
           
       </Box>
-      <Button onClick={(e)=>setFilterState(null)} styleSheet={{width: '100%', alignSelf: 'center', position: 'relative', top: !(size < 400) ? '' : '2.2rem', borderRadius: '6px', marginTop: '.5rem'}} variant='outlined' textVariant='body1'>Limpar</Button>
+      <Button 
+        onClick={clearFilters} 
+        styleSheet={{
+          width: '100%',
+          alignSelf: 'center',
+          position: 'relative',
+          top: !(size < 400) ? '' : '2.2rem',
+          borderRadius: '6px',
+          marginTop: '.5rem'
+        }}
+        variant='outlined'
+        textVariant='body1'
+      >
+        Nova Pesquisa
+      </Button>
     </Box>
   );
 }

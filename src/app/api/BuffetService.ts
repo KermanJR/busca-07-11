@@ -649,6 +649,24 @@ export default class BuffetService {
         throw error;
       }
     }
+
+    static async deleteCupom(id: number): Promise<any> {
+      const url = `${API_URL_BUSCABUFFET}/cupons/${id}`;
+      const bearerToken = localStorage.getItem('USER_TOKEN');
+  
+      try {
+        const response = await axios.delete(url, {
+          headers: {
+            Authorization: `Bearer ${bearerToken}`,
+          },
+        });
+  
+        return response.data;
+      } catch (error) {
+        console.error('Erro ao editar o cupom:', error);
+        throw error;
+      }
+    }
   
 
     static async showPlans(): Promise<any> {

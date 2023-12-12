@@ -1,9 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useTheme } from "@src/app//theme/ThemeProvider";
 import FormBox from "@src/app/theme/components/Form/Form";
-import Select from "@src/app/theme/components/Select/Select";
 import Button from "@src/app/theme/components/Button/Button";
-import Input from "@src/app//theme/components/Input/Input";
 import useResponsive from "@src/app/theme/helpers/useResponsive";
 import useSize from "@src/app/theme/helpers/useSize";
 import { UserContext } from "@src/app/context/UserContext";
@@ -11,6 +9,8 @@ import { useRouter } from "next/dist/client/router";
 import BuffetService from "@src/app/api/BuffetService";
 import arrowDown from "../../../../../../../../public/assets/icons/arrow_down.jpg"
 import CategoryFilter from "./CategoryFilter";
+
+
 export default function FormSearch(){
 
   const categories1 = [
@@ -70,7 +70,7 @@ export default function FormSearch(){
 
   const [categoria, setCategoria] = useState('');
   const [cidade, setCidade] = useState('');
-
+  const [selectedCategories, setSelectedCategories] = useState<any>([]);
   const [cities, setCities] = useState([]);
 
   const theme = useTheme();
@@ -91,30 +91,38 @@ export default function FormSearch(){
     setSelectedCity(cidade)
     router.push('/busca')
   }
-    const [selectedCategories, setSelectedCategories] = useState<any>([]);
+ 
 
-    const handleCategoryChange = (categoryValue) => {
-      if (selectedCategories.includes(categoryValue)) {
-        setSelectedCategories(selectedCategories.filter((c) => c !== categoryValue));
-      } else {
-        setSelectedCategories([...selectedCategories, categoryValue]);
-      }
-    };
+  const handleCategoryChange = (categoryValue) => {
+    if(selectedCategories.includes(categoryValue)) {
+      setSelectedCategories(selectedCategories.filter((c) => c !== categoryValue));
+    }else {
+      setSelectedCategories([...selectedCategories, categoryValue]);
+    }
+  };
 
-  useEffect(() => {
-    BuffetService.showBuffets()
-      .then((res) => {
-   
-        let filteredBuffets = res.map((buffet) => buffet?.entidade?.enderecos[0]?.endereco?.cidade?.nome);
-    
-  
-        filteredBuffets = filteredBuffets.filter((city, index, self) => {
-          return self.indexOf(city) === index;
-        });
+  function capitalizarPrimeiraLetra(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
 
-        setCities(filteredBuffets);
+useEffect(() => {
+  BuffetService.showBuffets()
+    .then((res) => {
+      let filteredBuffets = res.map((buffet) => buffet?.entidade?.enderecos[0]?.endereco?.cidade?.nome
+        + ' - ' + buffet?.entidade?.enderecos[0]?.endereco?.cidade?.estado?.sigla
+      );
+      
+      // Adiciona a opção "Todos os locais" no início do array
+      filteredBuffets.unshift('Todos os locais');
+
+      // Filtra e remove duplicatas
+      filteredBuffets = filteredBuffets.filter((city, index, self) => {
+        return self.indexOf(city) === index;
       });
-  }, []);
+
+      setCities(filteredBuffets);
+    });
+}, []);
   
 
   return (
@@ -150,19 +158,16 @@ export default function FormSearch(){
         backgroundPosition: 'right 10px center', // Ajuste a posição da imagem da seta
         backgroundRepeat: 'no-repeat', // Não repita a imagem
         color: theme.colors.primary.x600,
-        fontWeight: 500
+        fontWeight: 500,
+        fontSize: '1rem'
       }}>
-        <option value="" style={{
-          color: theme.colors.primary.x600,
-          fontWeight: '500',
-          textAlign: 'left',
-        
-        }}>Todos os locais</option>
+
         {
           cities.map((item, index) => {
-            return <option key={index} value={item} style={{
+          return <option key={index} value={item} style={{
               color: theme.colors.primary.x600,
-              fontWeight: 500
+              fontWeight: 500,
+              fontSize: '.8rem'
             }}>{item}</option>
           })
         }

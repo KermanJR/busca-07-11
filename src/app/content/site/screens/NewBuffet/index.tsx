@@ -21,15 +21,14 @@ import useSize from "@src/app/theme/helpers/useSize";
 import ModalBudget from "../HomeScreen/Components/Modals/BudgetModal";
 import ModalLogin from "../HomeScreen/Components/Modals/LoginModal";
 import FundoLogin from '../../../../../../public/assets/images/fundo-login2.jpg';
-import LoadingButton from '@mui/lab/LoadingButton';
-import SendIcon from '@mui/icons-material/Send';
-import PagBankService from "@src/app/api/PagBankService";
+
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import ModalRecoveryPassword from "../HomeScreen/Components/Modals/RecoveryPassword";
-import WhatsAppButton from "../HomeScreen/Components/WhatsappButton";
-
-
+import { CiMail } from "react-icons/ci";
+import { CiUser } from "react-icons/ci";
+import { IoLockClosedOutline } from "react-icons/io5";
+import { BsBuilding } from "react-icons/bs";
 export default function NewBuffet() {
  
   const [response, setResponse] = useState<any>(null);
@@ -264,7 +263,7 @@ export default function NewBuffet() {
 
           <Box styleSheet={{display: 'flex', flexDirection: 'row',  alignContent: 'center', justifyContent: 'center', padding: '0 2rem'}}>
             <Box styleSheet={{borderRadius: '1px', backgroundColor: theme.colors.neutral.x000, padding: '.585rem'}}>
-            <Image src={IconEmail.src} alt="" styleSheet={{width: '29px',   height: size <= 1366 ?  '13px':'auto', objectFit: 'contain'}}/>
+            <CiMail fill={theme.colors.secondary.x500} size={22}/>
             </Box>
             <Input 
               type="email" 
@@ -275,7 +274,7 @@ export default function NewBuffet() {
                 width: '100%',
                 borderRadius: '1px',
                 backgroundColor: theme.colors.neutral.x000,
-                padding: size <= 1366 ?  '1rem':'.5rem .8rem',
+                padding: size <= 1366 ?  '1.25999rem':'.5rem .8rem',
                 height: size <= 1366 ?  '25px':'auto',
                 border: 'none'
               }}
@@ -284,7 +283,7 @@ export default function NewBuffet() {
           
           <Box styleSheet={{display: 'flex', flexDirection: 'row',  alignContent: 'center', justifyContent: 'center', padding: '0 2rem'}}>
             <Box styleSheet={{borderRadius: '1px', backgroundColor: theme.colors.neutral.x000, padding: '.6rem'}}>
-            <Image src={IconUser.src} alt="" styleSheet={{width: '29px',  height: size <= 1366 ?  '13px':'auto', objectFit: 'contain'}}/>
+            <CiUser fill={theme.colors.secondary.x500} size={22}/>
             </Box>
             <Input 
               type="text" 
@@ -295,7 +294,7 @@ export default function NewBuffet() {
                 width: '100%',
                 borderRadius: '1px',
                 backgroundColor: theme.colors.neutral.x000,
-                padding: size <= 1366 ?  '1rem':'.5rem .8rem',
+                padding: size <= 1366 ?  '1.25999rem':'.5rem .8rem',
                 border: 'none',
                 height: size <= 1366 ?  '25px':'auto',
                 filter: 'dropShadow(0px 8px 40px rgba(0, 0, 0, 0.05))'
@@ -305,7 +304,7 @@ export default function NewBuffet() {
 
           <Box styleSheet={{display: 'flex', flexDirection: 'row',  alignContent: 'center', justifyContent: 'center', padding: '0 2rem'}}>
             <Box styleSheet={{borderRadius: '1px', backgroundColor: theme.colors.neutral.x000, padding: '.6rem'}}>
-              <Image src={IconPassword.src} alt="" styleSheet={{width: '29px',  height: size <= 1366 ?  '13px':'auto', objectFit: 'contain'}}/>
+            <IoLockClosedOutline  color={theme.colors.secondary.x500} fill={theme.colors.secondary.x500} size={22}/>
             </Box>
             <Input 
               type="password" 
@@ -316,7 +315,7 @@ export default function NewBuffet() {
                 width: '100%',
                 borderRadius: '1px',
                 backgroundColor: theme.colors.neutral.x000,
-                padding: size <= 1366 ?  '1rem':'.5rem .8rem',
+                padding: size <= 1366 ?  '1.25999rem':'.5rem .8rem',
                 height: size <= 1366 ?  '25px':'auto',
                 border: 'none'
               }}
@@ -324,7 +323,7 @@ export default function NewBuffet() {
           </Box>
           <Box styleSheet={{display: 'flex', flexDirection: 'row',  alignContent: 'center', justifyContent: 'center', padding: '0 2rem'}}>
             <Box styleSheet={{borderRadius: '1px', backgroundColor: theme.colors.neutral.x000, padding: '.6rem'}}>
-              <Image src={IconCnpj.src} alt="" styleSheet={{width: '29px',  height: size <= 1366 ?  '12px':'auto', objectFit: 'contain'}}/>
+            <BsBuilding   fill={theme.colors.secondary.x500} size={21}/>
             </Box>
             <Input 
               type="text" 
@@ -333,10 +332,10 @@ export default function NewBuffet() {
               onChange={(e)=>formatDocument(e)}
               value={documento}
               styleSheet={{
-                width: '101%',
+                width: '100%',
                 borderRadius: '1px',
                 backgroundColor: theme.colors.neutral.x000,
-                padding: size <= 1366 ?  '1rem':'.5rem .8rem',
+                padding: size <= 1366 ?  '1.25999rem':'.5rem .8rem',
                 border: 'none',
                 height: size <= 1366 ?  '25px':'auto',
                 boxShadow: '(0px 8px 40px rgba(0, 0, 0, 0.05))'

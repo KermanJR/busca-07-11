@@ -218,29 +218,7 @@ const handlePageChange = (pageNumber) => {
                 </Text>
               </Box>
 
-              <Box styleSheet={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  gap: '.4rem'
-                }}
-                tag="div"
-            >
-                <Icon name="arrowChevronRight" fill={theme.colors.secondary.x500}/>
-                <Text variant="body1" styleSheet={{ color: theme.colors.neutral.x999, textAlign: 'left', width: '90%'}}>
-  {result?.['categorias']?.length > 0 ? (
-    result?.['categorias']?.map((item, index) => {
-      return (
-        <React.Fragment key={index}>
-          {item?.categoria?.nome}
-          {index < result?.['categorias']?.length - 1 ? ', ' : ''}
-        </React.Fragment>
-      );
-    })
-  ) : 'Nenhuma Categoria'}
-</Text>
-
-              </Box>
+             
 
             </Box>
 

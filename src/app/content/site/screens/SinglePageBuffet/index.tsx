@@ -197,13 +197,13 @@ export default function SinglePageBuffet(){
             display: 'grid',
             gridTemplateColumns: `${!isMobile ? '2fr 1fr' : '1fr'}`,
             gap: '4rem',
-            width: {md: '85%', sx: '100%'},
-            margin: !isMobile ? '5rem auto' : '1rem auto',
+
+            margin: !isMobile ? '5rem 4rem' : '1rem auto',
             padding: '0 1rem',
           }}>
            
              <>
-                <Box tag="div">
+                <Box tag="div" >
                   <Text tag="h3" variant="heading3semiBold" 
                     styleSheet={{
                       padding: '1rem 0',
@@ -311,12 +311,13 @@ export default function SinglePageBuffet(){
                   </Box>
 
                   {/*Informações Técnicas*/}
-                  <Box tag="div">
+                  <Box tag="div" >
                     <Text tag="h3" variant="heading3semiBold" 
                       styleSheet={{
                         padding: '1rem 0',
                         borderBottom: `1px solid ${theme.colors.neutral.x100}`,
-                        marginTop: '3rem'
+                        marginTop: '3rem',
+                     
                       }}>
                         Informações Técnicas
                     </Text>
@@ -326,7 +327,8 @@ export default function SinglePageBuffet(){
                           gridTemplateColumns: !(size < 500) ? 'repeat(3, 1fr)' : '1fr',
                           gap: '2rem',
                           marginTop: '3rem',
-                          flexWrap: 'wrap'
+                          flexWrap: 'wrap',
+                          
                       }}
                     >
                       <Box styleSheet={{display: 'flex', flexDirection: 'row', gap: '1rem', justifyContent: 'left', alignItems: 'center'}}>
@@ -431,7 +433,8 @@ export default function SinglePageBuffet(){
                           display: 'grid',
                           gridTemplateColumns: !(size < 500) ? 'repeat(3, 1fr)' : '1fr',
                           gap: '2rem',
-                          marginTop: !(size < 500) ? '3rem' : '1rem'
+                          marginTop: !(size < 500) ? '3rem' : '1rem',
+                        
                       }}
                     >
                       <Box styleSheet={{display: 'flex', flexDirection: 'row', gap: '1rem', justifyContent: 'left', alignItems: 'center', marginLeft: '-2rem'}}>
